@@ -1,0 +1,123 @@
+﻿<Window x:Class="KarteiKartenLernen.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KarteiKartenLernen"
+        mc:Ignorable="d"
+        Title="Kartei Karten Lernen" Height="450" Width="800"
+        Closing="MainWindow_Closing"  >
+    <Window.Resources>
+        <!--<local:MainWindowViewModel x:Key="vm" />-->
+        <local:BoolToVisibility x:Key="visiConverter" />
+        <Style x:Key="CustomMenuStyle" TargetType="Menu">
+            <Setter Property="Background" Value="LightGray"/>
+            <!-- Change background color -->
+            <Setter Property="FontSize" Value="14"/>
+            <!-- Change font size -->
+            <!-- Add more setters to customize other properties as needed -->
+        </Style>
+    </Window.Resources>
+    <Window.DataContext>
+        <local:MainWindowViewModel />
+    </Window.DataContext>
+    <Grid>
+        <Menu Style="{StaticResource CustomMenuStyle}">
+            <MenuItem Header="File">
+                <!-- <MenuItem Header="Open" Click="Open_Click"/> -->
+                <MenuItem Header="Import Csv" Command="{Binding LoadCsvCommand}"/>
+                <MenuItem Header="Load Progress" Command="{Binding LoadProgressCommand}"/>
+                <MenuItem Header="Recent Progress" ItemsSource="{Binding RecentFiles}" />
+
+
+                <!-- <MenuItem Header="Save Progress" Command="{Binding SaveProgressCommand}"/> -->
+                <!-- Other File-related options can be added here -->
+                <!-- Example: <MenuItem Header="Save" Click="Save_Click"/> -->
+                <!-- Example: <MenuItem Header="Exit" Click="Exit_Click"/> -->
+            </MenuItem>
+            <!-- Other top-level menu items can be added here -->
+        </Menu>
+
+        <Label Content="{Binding CardsBoxOrigin}" FontSize="12"
+            HorizontalContentAlignment="Center"
+            HorizontalAlignment="Right" VerticalAlignment="Top" 
+            Height="30" Margin="150,10,150,10" 
+            Visibility="{Binding 
+                IsActivated, 
+                Converter={StaticResource visiConverter}}"
+            FontWeight="DemiBold"/>
+        
+        <Label Content="{Binding CardsLeft}" FontSize="12"
+            HorizontalContentAlignment="Center"
+            HorizontalAlignment="Right" VerticalAlignment="Top" 
+            Height="30" Margin="10,10,10,10" 
+            Visibility="{Binding 
+                IsActivated, 
+                Converter={StaticResource visiConverter}}"
+            FontWeight="DemiBold"/>
+
+        <TextBox Text="{Binding QuestionText}" FontSize="24"
+               IsReadOnly="True"
+               HorizontalContentAlignment="Center"
+               HorizontalAlignment="Stretch" VerticalAlignment="Top" 
+               Height="60" Margin="10,50,10,0" 
+               BorderThickness="2" BorderBrush="Azure"
+               Visibility="{Binding 
+                   IsActivated, 
+                   Converter={StaticResource visiConverter}}"
+               FontWeight="DemiBold"/>
+        <TextBox Text="{Binding AnswerText}" FontSize="24"
+               IsReadOnly="True"
+               HorizontalContentAlignment="Center" 
+               VerticalContentAlignment="Center" 
+               HorizontalAlignment="Stretch" VerticalAlignment="Top" 
+               Height="150" Margin="10,125,10,0"
+               BorderThickness="2" BorderBrush="Azure"
+               Visibility="{Binding 
+                   IsResponseState, 
+                   Converter={StaticResource visiConverter}}"
+               FontWeight="DemiBold"/>
+
+        <Button Content="Reveal" 
+                Command="{Binding RevealCommand}"
+                FontSize="20"
+                FontWeight="DemiBold"
+                Visibility="{Binding 
+                    IsQuestionState, 
+                    Converter={StaticResource visiConverter}}" 
+                HorizontalAlignment="Center" Height="50" Margin="0,300,0,0" VerticalAlignment="Top" Width="247"/>
+        <Grid HorizontalAlignment="Stretch"
+              VerticalAlignment="Top" 
+              Height="50" Margin="0,300,0,0"
+              Visibility="{Binding 
+                    IsResponseState, 
+                    Converter={StaticResource visiConverter}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Content="Knew it" 
+                    Grid.Column="0"
+                    Background="Green"
+                    FontSize="20"
+                    FontWeight="DemiBold"
+                    Command="{Binding KnewItCommand}"
+                    HorizontalAlignment="Stretch"/>
+            <Button Content="Didn't know it" 
+                    Grid.Column="1"
+                    Background="Red"
+                    FontSize="20"
+                    FontWeight="DemiBold"
+                    Command="{Binding DidntKnowItCommand}" 
+                    HorizontalAlignment="Stretch"/>
+        </Grid>
+        <Label Content="{Binding SessionNumber}" FontSize="12"
+        HorizontalContentAlignment="Center"
+        HorizontalAlignment="Right" VerticalAlignment="Top" 
+        Height="30" Margin="10,350,10,10" 
+        Visibility="{Binding 
+            IsActivated, 
+            Converter={StaticResource visiConverter}}"
+        FontWeight="DemiBold"/>
+    </Grid>
+</Window>
