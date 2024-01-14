@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KarteiKartenLernen
 {
-    enum ProgramState
+    public enum ProgramState
     {
         inactive_state,
         question_state,

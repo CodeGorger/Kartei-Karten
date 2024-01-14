@@ -96,6 +96,14 @@ namespace KarteiKartenLernen
 
         public void AddNewRecentFile(string new_recent_file)
         {
+            // Check if it's already in the list, because then ignore it.
+            for(int i=0; i< RecentFiles.Count; i++)
+            {
+                if(new_recent_file== RecentFiles[i])
+                {
+                    return;
+                }
+            }
             RecentFiles.Add(new_recent_file);
             if (RecentFiles.Count>=7)
             {

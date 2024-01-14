@@ -18,7 +18,7 @@ namespace KarteiKartenLernen
         }
         private void revealCard(object parameter)
         {
-            _programState = ProgramState.answer_state;
+            MainProgramState = ProgramState.answer_state;
         }
 
         public ICommand KnewItCommand { get; set; }
@@ -28,20 +28,16 @@ namespace KarteiKartenLernen
         }
         private void knewIt(object parameter)
         {
-            bool is_last_question=_questionManager.KnewIt();
-            if(is_last_question)
+            bool is_last_question = _questionManager.KnewIt();
+            if (is_last_question)
             {
+                AddNewRecentFile(_questionManager.GetProgressFileName());
                 SessionNumber = "";
-                _programState = ProgramState.inactive_state;
+                MainProgramState = ProgramState.inactive_state;
             }
             else
             {
-                var qna = _questionManager.NextQuestionAndAnswer();
-                QuestionText = qna.Item1;
-                AnswerText = qna.Item2;
-                _programState = ProgramState.inactive_state;
-                CardsLeft =_questionManager.GetCardsLeft();
-                CardsBoxOrigin = _questionManager.GetCardBox();
+                _setNextQna();
             }
         }
 
@@ -53,11 +49,7 @@ namespace KarteiKartenLernen
         private void didntKnowIt(object parameter)
         {
             _questionManager.DidntKnowIt();
-            var qna = _questionManager.NextQuestionAndAnswer();
-            QuestionText = qna.Item1;
-            AnswerText = qna.Item2;
-            _programState = ProgramState.question_state;
-            CardsBoxOrigin = _questionManager.GetCardBox();
+            _setNextQna();
         }
 
         public ICommand LoadCsvCommand { get; set; }
@@ -70,7 +62,7 @@ namespace KarteiKartenLernen
         private void loadCsvAndStartSession(object parameter)
         {
             // Ask for importable CSV (wordlist to learn)
-            string csv_file=FileHelper.AskForFile("csv files (*.csv)|*.csv|All files (*.*)|*.*");
+            string csv_file = FileHelper.AskForFile("csv files (*.csv)|*.csv|All files (*.*)|*.*");
             if ("" == csv_file)
             {
                 System.Diagnostics.Debug.WriteLine("File search dialog canceled.");
@@ -86,16 +78,9 @@ namespace KarteiKartenLernen
             }
             _questionManager.ImportQuestionAndAnswerList(loadedCsv.Item2);
             _questionManager.StartTrainingSession();
+            SessionNumber = _questionManager.GetSessionNumber();
 
-            // for now we have flash cards to ask for. if a progress will be loaded
-            // later (in this routine or by user action) we can just call 
-            //NextQuestionAndAnswer again.
-            var qna = _questionManager.NextQuestionAndAnswer();
-            QuestionText = qna.Item1;
-            AnswerText = qna.Item2;
-            _programState = ProgramState.question_state;
-            CardsLeft = _questionManager.GetCardsLeft();
-            CardsBoxOrigin = _questionManager.GetCardBox();
+            _setNextQna();
         }
 
         public ICommand LoadProgressCommand { get; set; }
@@ -115,21 +100,27 @@ namespace KarteiKartenLernen
 
             // Load KKP
             var loadedProgress = FileHelper.LoadProgress(progress_file);
-            if (loadedProgress.Item1)
+            if (!loadedProgress.Item1)
             {
                 System.Diagnostics.Debug.WriteLine("Loading progress (kkp file) failed.");
                 return;
             }
-            _questionManager.SetProgressFile(progress_file);
-            _questionManager.SetTrainingSessionId(loadedProgress.Item2);
-            _questionManager.SetProgress(loadedProgress.Item3);
+            AddNewRecentFile(progress_file);
+            _questionManager.SetProgress(progress_file, loadedProgress.Item2, loadedProgress.Item3);
+            _questionManager.StartTrainingSession();
+            SessionNumber = _questionManager.GetSessionNumber();
+
+            _setNextQna();
+        }
+
+        private void _setNextQna()
+        {
             var qna = _questionManager.NextQuestionAndAnswer();
             QuestionText = qna.Item1;
             AnswerText = qna.Item2;
-            _programState = ProgramState.question_state;
+            MainProgramState = ProgramState.question_state;
             CardsLeft = _questionManager.GetCardsLeft();
             CardsBoxOrigin = _questionManager.GetCardBox();
-            _questionManager.StartTrainingSession();
         }
     }
 }

@@ -10,6 +10,17 @@ namespace KarteiKartenLernen
     public partial class MainWindowViewModel
     {
         private ProgramState _programState;
+        public ProgramState MainProgramState
+        {
+            set
+            {
+                _programState = value;
+                OnPropertyChanged(nameof(IsInactive));
+                OnPropertyChanged(nameof(IsActivated));
+                OnPropertyChanged(nameof(IsQuestionState));
+                OnPropertyChanged(nameof(IsResponseState));
+            }
+        }
 
         public bool IsInactive
         {

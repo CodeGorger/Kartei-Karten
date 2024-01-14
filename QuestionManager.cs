@@ -48,24 +48,18 @@ namespace KarteiKartenLernen
             }
         }
 
-        public void SetProgressFile(string in_progress_file)
+        public void SetProgress(
+            string in_progress_file, 
+            int in_training_session_id, 
+            List<(string, string, int)> in_progress)
         {
             _progress_file = in_progress_file;
-        }
-
-        public void SetTrainingSessionId(int in_training_session_id)
-        {
             _training_session_id = in_training_session_id;
-        }
-
-        public void SetProgress(List<(string, string, int)> in_progress)
-        {
             _qna_list = new List<FlashCard>();
             foreach (var c in in_progress)
             {
                 _qna_list.Add(new FlashCard(c.Item1, c.Item2, c.Item3));
             }
-            StartTrainingSession();
         }
 
         public void StartTrainingSession()
@@ -170,12 +164,20 @@ namespace KarteiKartenLernen
         {
             if(-1==_qna_list[_open_question_ids[0]].promote)
             {
-                return "Card's box: 1";
+                return "Card's box: 1 (mod 1)";
             }
             else
             {
-                return "Card's box: " + _qna_list[_open_question_ids[0]].box_id;
+                int b = _qna_list[_open_question_ids[0]].box_id;
+                int m = _box_repeat_iterations[b];
+
+                return "Card's box: " + b + " (mod " + m + ")";
             }
+        }
+
+        public string GetSessionNumber()
+        {
+            return "Session number " + _training_session_id;
         }
 
         public bool KnewIt()
@@ -227,6 +229,7 @@ namespace KarteiKartenLernen
 
             if ("" != _progress_file)
             {
+                // Already loaded by progress file
                 MessageBoxResult result_know_prog_file = MessageBox.Show("Save to " + _progress_file + "?", "Save Progress?", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result_know_prog_file == MessageBoxResult.Yes)
                 {
@@ -238,11 +241,18 @@ namespace KarteiKartenLernen
             MessageBoxResult result = MessageBox.Show("Save progress to file?", "Save Progress?", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {
+                // Only possible if it was imported
                 string kkp_file = FileHelper.AskForFile("kkp files (*.kkp)|*.kkp|All files (*.*)|*.*", true);
+                _progress_file = kkp_file;
                 FileHelper.SaveProgress(kkp_file, _training_session_id, _toProgressCsv());
             }
         }
-        
+
+        public string GetProgressFileName()
+        {
+            return _progress_file;
+        }
+
         private List<(string, string, int)> _toProgressCsv()
         {
             List < (string, string, int) > ret = new List<(string, string, int)>();
