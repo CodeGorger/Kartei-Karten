@@ -41,6 +41,7 @@ namespace KarteiKartenLernen
 
         public void ImportQuestionAndAnswerList(List<(string, string)> in_qna_list)
         {
+            _training_session_id = 0;
             _qna_list = new List<FlashCard>();
             foreach (var qna in in_qna_list)
             {
@@ -207,7 +208,8 @@ namespace KarteiKartenLernen
             int tmp_id = _open_question_ids[0];
             _open_question_ids.RemoveAt(0);
             Random rng = new Random();
-            int new_insert_id = rng.Next(0, _open_question_ids.Count - 1);
+            int new_insert_id = rng.Next(1, _open_question_ids.Count+1);
+            System.Diagnostics.Debug.WriteLine("new_insert_id:" + new_insert_id);
             _open_question_ids.Insert(new_insert_id, tmp_id);
         }
 
