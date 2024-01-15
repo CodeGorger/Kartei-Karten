@@ -1,190 +1,190 @@
-红色 - hóngsè,Red
-蓝色 - lán sè,Blue
-黄色 - huángsè,Yellow
-绿色 - lǜsè,Green
-紫色 - zǐsè,Purple
-橙色 - chéngsè,Orange
-粉红色 - fěnhóng sè,Pink
-黑色 - hēisè,Black
-白色 - báisè,White
-灰色 - huīsè,Gray
-水电 - shuǐdiàn,Water and electricity
-煤气 - méiqì,Gas
-网络 - wǎngluò,Internet
-供暖 - gōngnuǎn,Heating
-照明 - zhàomíng,Lighting
-暖气 - nuǎnqì,Heater
-垃圾处理 - lèsè chǔlǐ,Trash disposal
-电视 - diànshì,Television
-冰箱 - bīngxiāng,Refrigerator
-洗衣机 - xǐyījī,Washing machine
-空调 - kōngtiáo,Air conditioner
-电话 - diànhuà,Telephone
-管道 - guǎndào,Pipeline
-电梯 - diàntī,Elevator
-燃气灶 - ránqìzào,Gas stove
-马桶 - mǎtǒng,Toilet
-消防设施 - xiāofáng shèshī,Fire safety equipment
-太阳能板 - tàiyángnéng bǎn,Solar panel
-储热水器 - chǔ rèshuǐqì,Water heater
-宽带 - kuāndài,Broadband
-沙发 - shāfā,Sofa
-床 - chuáng,Bed
-桌子 - zhuōzi,Table
-椅子 - yǐzi,Chair
-灯具 - dēngjù,Lamp
-电视机 - diànshìjī,Television
-冰箱 - bīngxiāng,Refrigerator
-洗衣机 - xǐyījī,Washing machine
-微波炉 - wēibōlú,Microwave oven
-吸尘器 - xīchénqì,Vacuum cleaner
-书架 - shūjià,Bookshelf
-花瓶 - huāpíng,Flower vase
-镜子 - jìngzi,Mirror
-窗帘 - chuānglián,Curtains
-咖啡桌 - kāfēi zhuō,Coffee table
-烤箱 - kǎoxiāng,Oven
-风扇 - fēngshàn,Fan
-卫生间 - wèishēngjiān,Bathroom
-吹风机 - chuīfēngjī,Hairdryer
-电话 - diànhuà,Telephone
-狗 - gǒu,Dog
-猫 - māo,Cat
-大象 - dàxiàng,Elephant
-狮子 - shīzi,Lion
-熊 - xióng,Bear
-猴子 - hóuzi,Monkey
-蛇 - shé,Snake
-鸟 - niǎo,Bird
-海豚 - hǎitún,Dolphin
-老虎 - lǎohǔ,Tiger
-海龟 - hǎiguī,Sea turtle
-兔子 - tùzi,Rabbit
-企鹅 - qǐ'é,Penguin
-蝴蝶 - húdié,Butterfly
-猎豹 - lièbào,Cheetah
-犀牛 - xīniú,Rhinoceros
-鲨鱼 - shāyú,Shark
-青蛙 - qīngwā,Frog
-蜜蜂 - mìfēng,Bee
-海豹 - hǎibào,Seal
-斑马 - bānmǎ,Zebra
-乌龟 - wūguī,Tortoise
-长颈鹿 - chángjǐnglù,Giraffe
-蝙蝠 - biānfú,Bat
-狐狸 - húlí,Fox
-西红柿 - xīhóngshì,Tomato
-黄瓜 - huángguā,Cucumber
-胡萝卜 - húluóbo,Carrot
-白菜 - báicài,Chinese Cabbage
-土豆 - tǔdòu,Potato
-洋葱 - yángcōng,Onion
-菠菜 - bōcài,Spinach
-茄子 - qiézi,Eggplant
-青椒 - qīngjiāo,Bell Pepper
-花菜 - huācài,Cauliflower
-黄椒 - huángjiāo,Yellow Pepper
-南瓜 - nánguā,Pumpkin
-豆腐 - dòufu,Tofu
-芹菜 - qíncài,Celery
-蘑菇 - mógu,Mushroom
-豌豆 - wāndòu,Peas
-红薯 - hóngshǔ,Sweet Potato
-苦瓜 - kǔguā,Bitter Gourd
-西兰花 - xīlánhuā,Broccoli
-冬瓜 - dōngguā,Winter Melon
-菜花 - càihuā,Cauliflower (colloquial)
-苹果瓜 - píngguǒguā,Watermelon
-秋葵 - qiūkuí,Okra
-芦笋 - lúnsǔn,Asparagus
-生菜 - shēngcài,Lettuce
-苹果 - píngguǒ,Apple
-香蕉 - xiāngjiāo,Banana
-橙子 - chéngzi,Orange
-葡萄 - pútáo,Grapes
-梨 - lí,Pear
-草莓 - cǎoméi,Strawberry
-柠檬 - níngméng,Lemon
-樱桃 - yīngtáo,Cherry
-蜜桃 - mìtáo,Peach
-芒果 - mángguǒ,Mango
-猕猴桃 - míhóutiáo,Kiwi
-西瓜 - xīguā,Watermelon
-哈密瓜 - hāmìguā,Cantaloupe
-李子 - lǐzi,Plum
-柚子 - yòuzi,Pomelo
-橙子 - chéngzi,Mandarin Orange
-榴莲 - liúlián,Durian
-橙子 - chéngzi,Grapefruit
-火龙果 - huǒlóngguǒ,Dragon Fruit
-菠萝 - bōluó,Pineapple
-榴莲 - liúlián,Lychee
-枇杷 - pípa,Loquat
-石榴 - shíliu,Pomegranate
-橄榄 - gǎnlǎn,Olive
-柿子 - shìzi,Persimmon
-汽车 - qìchē,Car
-自行车 - zìxíngchē,Bicycle
-飞机 - fēijī,Airplane
-火车 - huǒchē,Train
-巴士 - bāshì,Bus
-摩托车 - mótuōchē,Motorcycle
-船 - chuán,Boat
-出租车 - chūzūchē,Taxi
-卡车 - kǎchē,Truck
-直升机 - zhíshēngjī,Helicopter
-地铁 - dìtiě,Subway
-电动车 - diàndòngchē,Electric Vehicle
-三轮车 - sānlúnchē,Tricycle
-轮船 - lúnchuán,Ship
-滑板车 - huábǎnchē,Scooter
-头发 - tóufǎ,Hair
-眼睛 - yǎnjīng,Eyes
-耳朵 - ěrduo,Ears
-鼻子 - bízi,Nose
-嘴巴 - zuǐbā,Mouth
-脸 - liǎn,Face
-脖子 - bózi,Neck
-肩膀 - jiānbǎng,Shoulder
-手臂 - shǒubì,Arm
-手 - shǒu,Hand
-胸部 - xiōngbù,Chest
-背部 - bèibù,Back
-腰部 - yāobù,Waist
-腿 - tuǐ,Leg
-脚 - jiǎo,Foot
-心脏 - xīnzàng,Heart
-肺 - fèi,Lungs
-肝脏 - gānzàng,Liver
-肾脏 - shènzàng,Kidneys
-脑 - nǎo,Brain
-胃 - wèi,Stomach
-胰腺 - yíxiàn,Pancreas
-小肠 - xiǎocháng,Small intestine
-大肠 - dàcháng,Large intestine
-膀胱 - pángguāng,Bladder
-胆囊 - dǎnnáng,Gallbladder
-脾脏 - pízàng,Spleen
-甲状腺 - jiǎzhuàngxiàn,Thyroid gland
-骨髓 - gǔsuǐ,Bone marrow
-淋巴结 - línbājié,Lymph nodes
-山脉 - Shānmài,Mountain Range
-河流 - Héliú,River
-海洋 - Hǎiyáng,Ocean
-平原 - Píngyuán,Plain
-沙漠 - Shāmò,Desert
-湖泊 - Húpō,Lake
-森林 - Sēnlín,Forest
-岛屿 - Dǎoyǔ,Islands
-丘陵 - Qiūlíng,Hills
-草原 - Cǎoyuán,Grassland
-剑 - Jiàn,Sword
-弓箭 - Gōngjiàn,Bow and Arrow
-枪 - Qiāng,Firearm
-匕首 - Bǐshǒu,Dagger
-长矛 - Chángmáo,Spear
-战斧 - Zhàn fǔ,Battle Axe
-手枪 - Shǒuqiāng,Handgun
-冲锋枪 - Chōngfēngqiāng,Submachine Gun
-弩 - Nǔ,Crossbow
-投石器 - Tóushíqì,Catapult
+红色 - hóngsè;Red
+蓝色 - lán sè;Blue
+黄色 - huángsè;Yellow
+绿色 - lǜsè;Green
+紫色 - zǐsè;Purple
+橙色 - chéngsè;Orange
+粉红色 - fěnhóng sè;Pink
+黑色 - hēisè;Black
+白色 - báisè;White
+灰色 - huīsè;Gray
+水电 - shuǐdiàn;Water and electricity
+煤气 - méiqì;Gas
+网络 - wǎngluò;Internet
+供暖 - gōngnuǎn;Heating
+照明 - zhàomíng;Lighting
+暖气 - nuǎnqì;Heater
+垃圾处理 - lèsè chǔlǐ;Trash disposal
+电视 - diànshì;Television
+冰箱 - bīngxiāng;Refrigerator
+洗衣机 - xǐyījī;Washing machine
+空调 - kōngtiáo;Air conditioner
+电话 - diànhuà;Telephone
+管道 - guǎndào;Pipeline
+电梯 - diàntī;Elevator
+燃气灶 - ránqìzào;Gas stove
+马桶 - mǎtǒng;Toilet
+消防设施 - xiāofáng shèshī;Fire safety equipment
+太阳能板 - tàiyángnéng bǎn;Solar panel
+储热水器 - chǔ rèshuǐqì;Water heater
+宽带 - kuāndài;Broadband
+沙发 - shāfā;Sofa
+床 - chuáng;Bed
+桌子 - zhuōzi;Table
+椅子 - yǐzi;Chair
+灯具 - dēngjù;Lamp
+电视机 - diànshìjī;Television
+冰箱 - bīngxiāng;Refrigerator
+洗衣机 - xǐyījī;Washing machine
+微波炉 - wēibōlú;Microwave oven
+吸尘器 - xīchénqì;Vacuum cleaner
+书架 - shūjià;Bookshelf
+花瓶 - huāpíng;Flower vase
+镜子 - jìngzi;Mirror
+窗帘 - chuānglián;Curtains
+咖啡桌 - kāfēi zhuō;Coffee table
+烤箱 - kǎoxiāng;Oven
+风扇 - fēngshàn;Fan
+卫生间 - wèishēngjiān;Bathroom
+吹风机 - chuīfēngjī;Hairdryer
+电话 - diànhuà;Telephone
+狗 - gǒu;Dog
+猫 - māo;Cat
+大象 - dàxiàng;Elephant
+狮子 - shīzi;Lion
+熊 - xióng;Bear
+猴子 - hóuzi;Monkey
+蛇 - shé;Snake
+鸟 - niǎo;Bird
+海豚 - hǎitún;Dolphin
+老虎 - lǎohǔ;Tiger
+海龟 - hǎiguī;Sea turtle
+兔子 - tùzi;Rabbit
+企鹅 - qǐ'é;Penguin
+蝴蝶 - húdié;Butterfly
+猎豹 - lièbào;Cheetah
+犀牛 - xīniú;Rhinoceros
+鲨鱼 - shāyú;Shark
+青蛙 - qīngwā;Frog
+蜜蜂 - mìfēng;Bee
+海豹 - hǎibào;Seal
+斑马 - bānmǎ;Zebra
+乌龟 - wūguī;Tortoise
+长颈鹿 - chángjǐnglù;Giraffe
+蝙蝠 - biānfú;Bat
+狐狸 - húlí;Fox
+西红柿 - xīhóngshì;Tomato
+黄瓜 - huángguā;Cucumber
+胡萝卜 - húluóbo;Carrot
+白菜 - báicài;Chinese Cabbage
+土豆 - tǔdòu;Potato
+洋葱 - yángcōng;Onion
+菠菜 - bōcài;Spinach
+茄子 - qiézi;Eggplant
+青椒 - qīngjiāo;Bell Pepper
+花菜 - huācài;Cauliflower
+黄椒 - huángjiāo;Yellow Pepper
+南瓜 - nánguā;Pumpkin
+豆腐 - dòufu;Tofu
+芹菜 - qíncài;Celery
+蘑菇 - mógu;Mushroom
+豌豆 - wāndòu;Peas
+红薯 - hóngshǔ;Sweet Potato
+苦瓜 - kǔguā;Bitter Gourd
+西兰花 - xīlánhuā;Broccoli
+冬瓜 - dōngguā;Winter Melon
+菜花 - càihuā;Cauliflower (colloquial)
+苹果瓜 - píngguǒguā;Watermelon
+秋葵 - qiūkuí;Okra
+芦笋 - lúnsǔn;Asparagus
+生菜 - shēngcài;Lettuce
+苹果 - píngguǒ;Apple
+香蕉 - xiāngjiāo;Banana
+橙子 - chéngzi;Orange
+葡萄 - pútáo;Grapes
+梨 - lí;Pear
+草莓 - cǎoméi;Strawberry
+柠檬 - níngméng;Lemon
+樱桃 - yīngtáo;Cherry
+蜜桃 - mìtáo;Peach
+芒果 - mángguǒ;Mango
+猕猴桃 - míhóutiáo;Kiwi
+西瓜 - xīguā;Watermelon
+哈密瓜 - hāmìguā;Cantaloupe
+李子 - lǐzi;Plum
+柚子 - yòuzi;Pomelo
+橙子 - chéngzi;Mandarin Orange
+榴莲 - liúlián;Durian
+橙子 - chéngzi;Grapefruit
+火龙果 - huǒlóngguǒ;Dragon Fruit
+菠萝 - bōluó;Pineapple
+榴莲 - liúlián;Lychee
+枇杷 - pípa;Loquat
+石榴 - shíliu;Pomegranate
+橄榄 - gǎnlǎn;Olive
+柿子 - shìzi;Persimmon
+汽车 - qìchē;Car
+自行车 - zìxíngchē;Bicycle
+飞机 - fēijī;Airplane
+火车 - huǒchē;Train
+巴士 - bāshì;Bus
+摩托车 - mótuōchē;Motorcycle
+船 - chuán;Boat
+出租车 - chūzūchē;Taxi
+卡车 - kǎchē;Truck
+直升机 - zhíshēngjī;Helicopter
+地铁 - dìtiě;Subway
+电动车 - diàndòngchē;Electric Vehicle
+三轮车 - sānlúnchē;Tricycle
+轮船 - lúnchuán;Ship
+滑板车 - huábǎnchē;Scooter
+头发 - tóufǎ;Hair
+眼睛 - yǎnjīng;Eyes
+耳朵 - ěrduo;Ears
+鼻子 - bízi;Nose
+嘴巴 - zuǐbā;Mouth
+脸 - liǎn;Face
+脖子 - bózi;Neck
+肩膀 - jiānbǎng;Shoulder
+手臂 - shǒubì;Arm
+手 - shǒu;Hand
+胸部 - xiōngbù;Chest
+背部 - bèibù;Back
+腰部 - yāobù;Waist
+腿 - tuǐ;Leg
+脚 - jiǎo;Foot
+心脏 - xīnzàng;Heart
+肺 - fèi;Lungs
+肝脏 - gānzàng;Liver
+肾脏 - shènzàng;Kidneys
+脑 - nǎo;Brain
+胃 - wèi;Stomach
+胰腺 - yíxiàn;Pancreas
+小肠 - xiǎocháng;Small intestine
+大肠 - dàcháng;Large intestine
+膀胱 - pángguāng;Bladder
+胆囊 - dǎnnáng;Gallbladder
+脾脏 - pízàng;Spleen
+甲状腺 - jiǎzhuàngxiàn;Thyroid gland
+骨髓 - gǔsuǐ;Bone marrow
+淋巴结 - línbājié;Lymph nodes
+山脉 - Shānmài;Mountain Range
+河流 - Héliú;River
+海洋 - Hǎiyáng;Ocean
+平原 - Píngyuán;Plain
+沙漠 - Shāmò;Desert
+湖泊 - Húpō;Lake
+森林 - Sēnlín;Forest
+岛屿 - Dǎoyǔ;Islands
+丘陵 - Qiūlíng;Hills
+草原 - Cǎoyuán;Grassland
+剑 - Jiàn;Sword
+弓箭 - Gōngjiàn;Bow and Arrow
+枪 - Qiāng;Firearm
+匕首 - Bǐshǒu;Dagger
+长矛 - Chángmáo;Spear
+战斧 - Zhàn fǔ;Battle Axe
+手枪 - Shǒuqiāng;Handgun
+冲锋枪 - Chōngfēngqiāng;Submachine Gun
+弩 - Nǔ;Crossbow
+投石器 - Tóushíqì;Catapult
