@@ -129,7 +129,7 @@ namespace KarteiKartenLernen
             // For each card that shall be filled up
             for (int i = 0; i < fillup_count; i++)
             {
-                System.Diagnostics.Debug.WriteLine("i: " + i);
+                //System.Diagnostics.Debug.WriteLine("i: " + i);
                 // Take a random location in the qna_list
                 // and go through the list until you find one promotable obj.
                 int random_start_id = random.Next(0, _qna_list.Count - 1);
@@ -137,7 +137,7 @@ namespace KarteiKartenLernen
                 // Still maximally go through the list once, just for (no) bug purposes
                 for (int j = 0; j < _qna_list.Count+1; j++)
                 {
-                    System.Diagnostics.Debug.WriteLine("j: " + j);
+                    //System.Diagnostics.Debug.WriteLine("j: " + j);
                     if (0 == _qna_list[(j+random_start_id) % _qna_list.Count].box_id)
                     {
                         _qna_list[(j + random_start_id) % _qna_list.Count].box_id = 1;

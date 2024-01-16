@@ -97,8 +97,8 @@ namespace KarteiKartenLernen
             }
         }
 
-        private ObservableCollection<string> _recentFiles = new ObservableCollection<string>();
-        public ObservableCollection<string> RecentFiles
+        private ObservableCollection<RecentFileViewModel> _recentFiles = new ObservableCollection<RecentFileViewModel>();
+        public ObservableCollection<RecentFileViewModel> RecentFiles
         {
             get => _recentFiles;
         }

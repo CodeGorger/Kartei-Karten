@@ -29,9 +29,14 @@
                 <!-- <MenuItem Header="Open" Click="Open_Click"/> -->
                 <MenuItem Header="Import Csv" Command="{Binding LoadCsvCommand}"/>
                 <MenuItem Header="Load Progress" Command="{Binding LoadProgressCommand}"/>
-                <MenuItem Header="Recent Progress" ItemsSource="{Binding RecentFiles}" />
-
-
+                <MenuItem Header="Recent Progress" ItemsSource="{Binding RecentFiles}">
+                    <MenuItem.ItemContainerStyle>
+                        <Style>
+                            <Setter Property="MenuItem.Header" Value="{Binding FileName}"/>
+                            <Setter Property="MenuItem.Command" Value="{Binding Open}"/>
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
+                </MenuItem>
                 <!-- <MenuItem Header="Save Progress" Command="{Binding SaveProgressCommand}"/> -->
                 <!-- Other File-related options can be added here -->
                 <!-- Example: <MenuItem Header="Save" Click="Save_Click"/> -->

@@ -88,7 +88,7 @@ namespace KarteiKartenLernen
         {
             return true;
         }
-        private void loadProgressAndStartSession(object parameter)
+        private void selectLoadProgressAndStartSession(object parameter)
         {
             // Ask for loadable progess KKP (KKP = alibi CSV/progress file)
             string progress_file = FileHelper.AskForFile("kkp files (*.kkp)|*.kkp|All files (*.*)|*.*");
@@ -97,7 +97,11 @@ namespace KarteiKartenLernen
                 System.Diagnostics.Debug.WriteLine("File search dialog canceled.");
                 return;
             }
+            LoadProgressAndStartSession(progress_file);
+        }
 
+        public void LoadProgressAndStartSession(string progress_file)
+        {
             // Load KKP
             var loadedProgress = FileHelper.LoadProgress(progress_file);
             if (!loadedProgress.Item1)
@@ -112,6 +116,15 @@ namespace KarteiKartenLernen
 
             _setNextQna();
         }
+
+        //public ICommand LoadRecentFileCommand { get; set; }
+        //private bool canLoadRecentFile(object parameter)
+        //{
+        //    return true;
+        //}
+        //private void loadRecentFileAndStartSession(object parameter)
+        //{
+        //}
 
         private void _setNextQna()
         {

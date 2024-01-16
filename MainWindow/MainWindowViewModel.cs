@@ -32,7 +32,7 @@ namespace KarteiKartenLernen
                 canLoadCsv);
 
             LoadProgressCommand = new Command(
-                loadProgressAndStartSession,
+                selectLoadProgressAndStartSession,
                 canLoadProgress);
 
             LoadRecentFiles();
@@ -54,7 +54,7 @@ namespace KarteiKartenLernen
                     int count = 0;
                     while (!reader.EndOfStream)
                     {
-                        RecentFiles.Add(reader.ReadLine());
+                        RecentFiles.Add(new RecentFileViewModel(reader.ReadLine(), this));
                         count++;
                         if (count >= 7)
                         {
@@ -78,7 +78,7 @@ namespace KarteiKartenLernen
                     int count = 0;
                     foreach(var f in RecentFiles)
                     {
-                        write.WriteLine(f);
+                        write.WriteLine(f.FileName);
                         count++;
                         if (count >= 7)
                         {
@@ -99,12 +99,12 @@ namespace KarteiKartenLernen
             // Check if it's already in the list, because then ignore it.
             for(int i=0; i< RecentFiles.Count; i++)
             {
-                if(new_recent_file== RecentFiles[i])
+                if(new_recent_file== RecentFiles[i].FileName)
                 {
                     return;
                 }
             }
-            RecentFiles.Add(new_recent_file);
+            RecentFiles.Add(new RecentFileViewModel(new_recent_file, this));
             if (RecentFiles.Count>=7)
             {
                 RecentFiles.RemoveAt(0);
