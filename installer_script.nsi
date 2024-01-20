@@ -1,6 +1,16 @@
 !include LogicLib.nsh
 !include "nsDialogs.nsh"
 
+; !include "MUI2.nsh"
+
+Icon kkl_new.ico
+UninstallIcon kkl_new.ico
+; !define MUI_ICON ".\kkl_new.ico"
+; !define MUI_UNICON ".\kkl_new.ico"
+; !define MUI_HEADERIMAGE
+; !define MUI_HEADERIMAGE_BITMAP "path\to\InstallerLogo.bmp"
+; !define MUI_HEADERIMAGE_RIGHT
+
 ; Name of the installer
 Outfile "FlashCardLearningInstaller.exe"
 
