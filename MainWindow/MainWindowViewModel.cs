@@ -36,6 +36,7 @@ namespace KarteiKartenLernen
                 canLoadProgress);
 
             LoadRecentFiles();
+
         }
 
         ~MainWindowViewModel()
@@ -45,11 +46,15 @@ namespace KarteiKartenLernen
 
         public Action Close { get; set; }
 
+        private static string _recent_files_mem_path = 
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "flashcardlearning", "recent_files_memory.txt");
+
         public void LoadRecentFiles()
         {
             try
             {
-                using (StreamReader reader = new StreamReader("./recent_files_memory.txt"))
+                using (StreamReader reader = new StreamReader(_recent_files_mem_path))
                 {
                     int count = 0;
                     while (!reader.EndOfStream)
@@ -73,7 +78,13 @@ namespace KarteiKartenLernen
         {
             try
             {
-                using (StreamWriter write = new StreamWriter("./recent_files_memory.txt"))
+                string dir = Path.GetDirectoryName(_recent_files_mem_path);
+
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+                using (StreamWriter write = new StreamWriter(_recent_files_mem_path))
                 {
                     int count = 0;
                     foreach(var f in RecentFiles)

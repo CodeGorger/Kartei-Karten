@@ -51,7 +51,7 @@ Section SectInstall
     File "bin\publish\wpfgfx_cor3.dll"
 
     ; Create a desktop shortcut
-    CreateShortCut "$DESKTOP\FlashCardLearning.lnk" "$InstDir\YourExecutable.exe" ; Replace YourExecutable.exe with the actual executable name
+    CreateShortCut "$DESKTOP\FlashCardLearning.lnk" "$InstDir\KarteiKartenLernen.exe" ; Replace YourExecutable.exe with the actual executable name
 
 SectionEnd
 
