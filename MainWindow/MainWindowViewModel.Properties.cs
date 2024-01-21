@@ -102,6 +102,17 @@ namespace KarteiKartenLernen
         {
             get => _recentFiles;
         }
+
+        private bool _audioAvailable = true;
+        public bool IsAudioAvailable
+        {
+            get => _audioAvailable;
+            set
+            {
+                _audioAvailable = value;
+                OnPropertyChanged(nameof(IsAudioAvailable));
+            }
+        }
     }
 }
 
