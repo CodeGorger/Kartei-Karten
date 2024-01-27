@@ -12,6 +12,7 @@
     <Window.Resources>
         <!--<local:MainWindowViewModel x:Key="vm" />-->
         <local:BoolToVisibility x:Key="visiConverter" />
+        <local:BoolToSpeakerButtonGridWidth x:Key="widthConverter" />
         <Style x:Key="CustomMenuStyle" TargetType="Menu">
             <Setter Property="Background" Value="LightGray"/>
             <!-- Change background color -->
@@ -42,6 +43,8 @@
                 <!-- Example: <MenuItem Header="Save" Click="Save_Click"/> -->
                 <!-- Example: <MenuItem Header="Exit" Click="Exit_Click"/> -->
             </MenuItem>
+            <MenuItem Header="About" Command="{Binding AboutPressedCommand}">
+            </MenuItem>
             <!-- Other top-level menu items can be added here -->
         </Menu>
 
@@ -63,16 +66,38 @@
                 Converter={StaticResource visiConverter}}"
             FontWeight="DemiBold"/>
 
-        <TextBox Text="{Binding QuestionText}" FontSize="24"
-               IsReadOnly="True"
-               HorizontalContentAlignment="Center"
-               HorizontalAlignment="Stretch" VerticalAlignment="Top" 
-               Height="60" Margin="10,50,10,0" 
-               BorderThickness="2" BorderBrush="Azure"
-               Visibility="{Binding 
-                   IsActivated, 
-                   Converter={StaticResource visiConverter}}"
-               FontWeight="DemiBold"/>
+        <Grid HorizontalAlignment="Stretch"
+              VerticalAlignment="Top" 
+              Height="60" Margin="0,50,0,0"
+              Visibility="{Binding 
+                    IsActivated, 
+                    Converter={StaticResource visiConverter}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="{Binding IsAudioAvailable, Converter={StaticResource widthConverter}}"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBox Text="{Binding QuestionText}" FontSize="24"
+				Grid.Column="0"
+				IsReadOnly="True"
+				HorizontalContentAlignment="Center"
+				HorizontalAlignment="Stretch" VerticalAlignment="Top" 
+				Height="60" Margin="10,0,10,0" 
+				BorderThickness="2" BorderBrush="Azure"
+                FontWeight="DemiBold"/>
+
+            <Button Grid.Column="1"
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center"
+                    Margin="5,5,5,5"
+                    Padding="10,10,10,10"
+                    Command="{Binding SpeakerPressedCommand}">
+                <StackPanel>
+                    <Image Source="/Images/speaker.png" />
+                    <Label Content="Settings" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+        </Grid>
         <TextBox Text="{Binding AnswerText}" FontSize="24"
                IsReadOnly="True"
                HorizontalContentAlignment="Center" 

@@ -7,4 +7,14 @@
     <ApplicationIcon>kkl_new.ico</ApplicationIcon>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Images\speaker.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Images\speaker.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Media;
+
 
 namespace KarteiKartenLernen
 {
@@ -117,15 +119,6 @@ namespace KarteiKartenLernen
             _setNextQna();
         }
 
-        //public ICommand LoadRecentFileCommand { get; set; }
-        //private bool canLoadRecentFile(object parameter)
-        //{
-        //    return true;
-        //}
-        //private void loadRecentFileAndStartSession(object parameter)
-        //{
-        //}
-
         private void _setNextQna()
         {
             var qna = _questionManager.NextQuestionAndAnswer();
@@ -135,5 +128,29 @@ namespace KarteiKartenLernen
             CardsLeft = _questionManager.GetCardsLeft();
             CardsBoxOrigin = _questionManager.GetCardBox();
         }
+
+        public ICommand SpeakerPressedCommand { get; set; }
+        private bool canSpeakerPressed(object parameter)
+        {
+            return true;
+        }
+        private void speakerPressed(object parameter)
+        {
+            //MessageBox.Show("BLA test");
+            SoundPlayer player = new SoundPlayer(@"C:\Users\Simon\Desktop\pinyin\bla.wav");
+            player.Play();
+        }
+
+        public ICommand AboutPressedCommand { get; set; }
+        private bool canAboutPressedCommand(object parameter)
+        {
+            return true;
+        }
+        private void aboutPressedCommand(object parameter)
+        {
+            MessageBox.Show("Flashcard Learning\nBy Simon Poschenrieder\nMIT License");
+        }
+        
+
     }
 }

@@ -35,8 +35,15 @@ namespace KarteiKartenLernen
                 selectLoadProgressAndStartSession,
                 canLoadProgress);
 
-            LoadRecentFiles();
+            SpeakerPressedCommand = new Command(
+                speakerPressed,
+                canSpeakerPressed);
 
+            AboutPressedCommand = new Command(
+                aboutPressedCommand,
+                canAboutPressedCommand);
+
+            LoadRecentFiles();
         }
 
         ~MainWindowViewModel()
