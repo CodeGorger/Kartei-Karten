@@ -45,9 +45,9 @@ namespace KarteiKartenLernen
         }
 
 
-        static public (bool, List<(string, string)>) ImportWordlistCsv(string filePath)
+        static public (bool, List<(string, string, string)>) ImportWordlistCsv(string filePath)
         {
-            List<(string, string)> ret_wordlist = new List<(string, string)>();
+            List<(string, string, string)> ret_wordlist = new List<(string, string, string)>();
             bool ret_status = false;
             try
             {
@@ -60,7 +60,8 @@ namespace KarteiKartenLernen
 
                         string question = values[0].Trim();
                         string answer = values[1].Trim();
-                        ret_wordlist.Add((question, answer));
+                        string sound_file = values[2].Trim();
+                        ret_wordlist.Add((question, answer, sound_file));
                     }
                     ret_status = true;
                 }
@@ -98,9 +99,9 @@ namespace KarteiKartenLernen
         //}
 
 
-        static public (bool, int, List<(string, string, int)>) LoadProgress(string filePath)
+        static public (bool, int, List<(string, string, string, int)>) LoadProgress(string filePath)
         {
-            List<(string, string, int)> ret_progress = new List<(string, string, int)>();
+            List<(string, string, string, int)> ret_progress = new List<(string, string, string, int)>();
             bool ret_status = false;
             int session_id = 0;
             try
@@ -119,10 +120,11 @@ namespace KarteiKartenLernen
                         
                         string question = values[0].Trim();
                         string answer = values[1].Trim();
+                        string sound_file = values[2].Trim();
 
-                        if (int.TryParse(values[2], out int box_id))
+                        if (int.TryParse(values[3], out int box_id))
                         {
-                            ret_progress.Add((question, answer, box_id));
+                            ret_progress.Add((question, answer, sound_file, box_id));
                         }
                         else
                         {
@@ -143,7 +145,7 @@ namespace KarteiKartenLernen
             return (ret_status, session_id, ret_progress);
         }
 
-        static public void SaveProgress(string filePath, int session_id, List<(string, string, int)> progress)
+        static public void SaveProgress(string filePath, int session_id, List<(string, string, string, int)> progress)
         {
             try
             {
@@ -152,7 +154,7 @@ namespace KarteiKartenLernen
                     writer.WriteLine(session_id);
                     foreach(var c in progress)
                     {
-                        writer.WriteLine(c.Item1 + ";" + c.Item2 + ";" + c.Item3);
+                        writer.WriteLine(c.Item1 + ";" + c.Item2 + ";" + c.Item3 + ";" + c.Item4);
                     }
                     writer.Close();
                 }
