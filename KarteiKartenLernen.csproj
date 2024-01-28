@@ -8,11 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Images\speaker.png" />
+    <None Remove="speaker.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Images\speaker.png">
+    <Content Include="speaker.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

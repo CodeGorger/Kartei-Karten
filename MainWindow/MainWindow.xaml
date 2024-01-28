@@ -93,7 +93,7 @@
                     Padding="10,10,10,10"
                     Command="{Binding SpeakerPressedCommand}">
                 <StackPanel>
-                    <Image Source="/Images/speaker.png" />
+                    <Image Source="/speaker.png" />
                     <Label Content="Settings" HorizontalAlignment="Center"/>
                 </StackPanel>
             </Button>

@@ -18,7 +18,7 @@ Outfile "FlashCardLearningInstaller.exe"
 InstallDir $PROGRAMFILES\FlashCardLearning
 
 ; Request application privileges for Windows Vista and later
-RequestExecutionLevel admin
+; RequestExecutionLevel admin
 
 
 Page Directory
@@ -39,16 +39,22 @@ Section SectInstall
     SetOutPath $InstDir
     
     ; Files to be installed
-    File "bin\publish\clrcompression.dll"
-    File "bin\publish\clrjit.dll"
-    File "bin\publish\coreclr.dll"
-    File "bin\publish\D3DCompiler_47_cor3.dll"
+    File "bin\publish\speaker.png"
+    File "bin\publish\KarteiKartenLernen.dll"
     File "bin\publish\KarteiKartenLernen.exe"
-    File "bin\publish\mscordaccore.dll"
-    File "bin\publish\PenImc_cor3.dll"
-    File "bin\publish\PresentationNative_cor3.dll"
-    File "bin\publish\vcruntime140_cor3.dll"
-    File "bin\publish\wpfgfx_cor3.dll"
+    File "bin\publish\KarteiKartenLernen.runtimeconfig.json"
+    File "bin\publish\libmp3lame.32.dll"
+	
+    File "bin\publish\libmp3lame.64.dll"
+    File "bin\publish\NAudio.Asio.dll"
+    File "bin\publish\NAudio.Core.dll"
+    File "bin\publish\NAudio.dll"
+    File "bin\publish\NAudio.Lame.dll"
+	
+    File "bin\publish\NAudio.Midi.dll"
+    File "bin\publish\NAudio.Wasapi.dll"
+    File "bin\publish\NAudio.WinForms.dll"
+    File "bin\publish\NAudio.WinMM.dll"
 
     ; Create a desktop shortcut
     CreateShortCut "$DESKTOP\FlashCardLearning.lnk" "$InstDir\KarteiKartenLernen.exe" ; Replace YourExecutable.exe with the actual executable name
