@@ -5,8 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Media;
-
+using System.IO;
 
 namespace KarteiKartenLernen
 {
@@ -78,6 +77,9 @@ namespace KarteiKartenLernen
                 System.Diagnostics.Debug.WriteLine("Loading wordlist (csv file) failed.");
                 return;
             }
+
+            _progress_dir = Path.GetDirectoryName(csv_file);
+
             _questionManager.ImportQuestionAndAnswerList(loadedCsv.Item2);
             _questionManager.StartTrainingSession();
             SessionNumber = _questionManager.GetSessionNumber();
@@ -102,6 +104,8 @@ namespace KarteiKartenLernen
             LoadProgressAndStartSession(progress_file);
         }
 
+        private string _progress_dir;
+
         public void LoadProgressAndStartSession(string progress_file)
         {
             // Load KKP
@@ -111,12 +115,50 @@ namespace KarteiKartenLernen
                 System.Diagnostics.Debug.WriteLine("Loading progress (kkp file) failed.");
                 return;
             }
+            _progress_dir = Path.GetDirectoryName(progress_file); 
+
             AddNewRecentFile(progress_file);
             _questionManager.SetProgress(progress_file, loadedProgress.Item2, loadedProgress.Item3);
-            _questionManager.StartTrainingSession();
-            SessionNumber = _questionManager.GetSessionNumber();
 
-            _setNextQna();
+            if (_questionManager.ProgressFinished())
+            {
+                MessageBoxResult reset_progress =
+                    MessageBox.Show(
+                        "Congratulations, you have learnt all cards!\nDo you wish to reset the progress?",
+                        "Congratulation, Reset?",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Question);
+                // Already loaded by progress file
+                if (reset_progress == MessageBoxResult.Yes)
+                {
+                    _questionManager.ResetProgress();
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            // This must be a loop
+            // If in session five the only remaining open questions
+            // will be put in box 5 (ie mod 10), then there 
+            // are no questions for session 6 but only for 10.
+            // sessions will be skipped until we arive that box.
+            for(int i=0; i<10; i++ )
+            {
+                _questionManager.StartTrainingSession();
+                SessionNumber = _questionManager.GetSessionNumber();
+                if (_questionManager.QuestionsLeft())
+                {
+                    if(i>0)
+                    {
+                        MessageBox.Show("Fast forwarded " + i + " sessions.");
+                    }
+                    // normal path
+                    _setNextQna();
+                    break;
+                }
+            }
         }
 
         private void _setNextQna()
@@ -124,9 +166,36 @@ namespace KarteiKartenLernen
             var qna = _questionManager.NextQuestionAndAnswer();
             QuestionText = qna.Item1;
             AnswerText = qna.Item2;
-            MainProgramState = ProgramState.question_state;
+            IsAudioAvailable = _tryLoadSoundFile(qna.Item3);
             CardsLeft = _questionManager.GetCardsLeft();
+            MainProgramState = ProgramState.question_state;
             CardsBoxOrigin = _questionManager.GetCardBox();
+        }
+
+        private SoundWrapper _sound;
+
+        private bool _tryLoadSoundFile(string sound_file)
+        {
+            try
+            {
+                if(sound_file.EndsWith(".wav"))
+                {
+                    _sound = new SoundWrapper(_progress_dir + "/" + sound_file);
+                    return true;
+                }
+                else if(sound_file.EndsWith(".mp3"))
+                {
+                    _sound = new SoundWrapper(_progress_dir + "/" + sound_file);
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("Error: " + e.Message);
+            }
+
+            _sound = null;
+            return false;
         }
 
         public ICommand SpeakerPressedCommand { get; set; }
@@ -136,9 +205,7 @@ namespace KarteiKartenLernen
         }
         private void speakerPressed(object parameter)
         {
-            //MessageBox.Show("BLA test");
-            SoundPlayer player = new SoundPlayer(@"C:\Users\Simon\Desktop\pinyin\bla.wav");
-            player.Play();
+            _sound.Play();
         }
 
         public ICommand AboutPressedCommand { get; set; }

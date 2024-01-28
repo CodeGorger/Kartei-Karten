@@ -8,20 +8,23 @@ namespace KarteiKartenLernen
 {
     class FlashCard
     {
-        public FlashCard(string in_question, string in_answer)
+        public FlashCard(string in_question, string in_answer, string in_sound_file)
         {
             question = in_question;
             answer = in_answer;
+            sound_file = in_sound_file;
             box_id = 0;
         }
-        public FlashCard(string in_question, string in_answer, int in_box_id)
+        public FlashCard(string in_question, string in_answer, string in_sound_file, int in_box_id)
         {
             question = in_question;
             answer = in_answer;
+            sound_file = in_sound_file;
             box_id = in_box_id;
         }
         public string question;
         public string answer;
+        public string sound_file;
 
         // 0=new cards; 1...5=normal boxes; 6=learned
         public int box_id;

@@ -39,27 +39,27 @@ namespace KarteiKartenLernen
 
         private string _progress_file;
 
-        public void ImportQuestionAndAnswerList(List<(string, string)> in_qna_list)
+        public void ImportQuestionAndAnswerList(List<(string, string, string)> in_qna_list)
         {
             _training_session_id = 0;
             _qna_list = new List<FlashCard>();
             foreach (var qna in in_qna_list)
             {
-                _qna_list.Add(new FlashCard(qna.Item1, qna.Item2));
+                _qna_list.Add(new FlashCard(qna.Item1, qna.Item2, qna.Item3));
             }
         }
 
         public void SetProgress(
             string in_progress_file, 
             int in_training_session_id, 
-            List<(string, string, int)> in_progress)
+            List<(string, string, string, int)> in_progress)
         {
             _progress_file = in_progress_file;
             _training_session_id = in_training_session_id;
             _qna_list = new List<FlashCard>();
             foreach (var c in in_progress)
             {
-                _qna_list.Add(new FlashCard(c.Item1, c.Item2, c.Item3));
+                _qna_list.Add(new FlashCard(c.Item1, c.Item2, c.Item3, c.Item4));
             }
         }
 
@@ -91,6 +91,18 @@ namespace KarteiKartenLernen
                 }
             }
             _open_question_ids.Shuffle();
+        }
+
+        public bool ProgressFinished()
+        {
+            for (int i = 0; i < _qna_list.Count; i++)
+            {
+                if (_qna_list[i].box_id != 6)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         private int _box_count(int to_consider_box_id)
@@ -147,13 +159,15 @@ namespace KarteiKartenLernen
             }
         }
 
-        public (string, string) NextQuestionAndAnswer()
+        public (string, string, string) NextQuestionAndAnswer()
         {
             if (_open_question_ids.Count == 0)
             {
-                return ("", "");
+                return ("", "", "");
             }
-            return (_qna_list[_open_question_ids[0]].question, _qna_list[_open_question_ids[0]].answer);
+            return (_qna_list[_open_question_ids[0]].question,
+                _qna_list[_open_question_ids[0]].answer,
+                _qna_list[_open_question_ids[0]].sound_file);
         }
 
         public string GetCardsLeft()
@@ -161,8 +175,27 @@ namespace KarteiKartenLernen
             return "Cards left: " + _open_question_ids.Count.ToString();
         }
 
+        public bool QuestionsLeft()
+        {
+            return (_open_question_ids.Count > 0);
+        }
+
+        public void ResetProgress()
+        {
+            _training_session_id = 0;
+            for (int j = 0; j < _qna_list.Count; j++)
+            {
+                _qna_list[j].box_id = 0;
+            }
+        }
+
         public string GetCardBox()
         {
+            if(_open_question_ids.Count==0 || _qna_list.Count == 0)
+            {
+                return "";
+            }
+
             if(-1==_qna_list[_open_question_ids[0]].promote)
             {
                 return "Card's box: 1 (mod 1)";
@@ -255,13 +288,13 @@ namespace KarteiKartenLernen
             return _progress_file;
         }
 
-        private List<(string, string, int)> _toProgressCsv()
+        private List<(string, string, string, int)> _toProgressCsv()
         {
-            List < (string, string, int) > ret = new List<(string, string, int)>();
+            List < (string, string, string, int) > ret = new List<(string, string, string, int)>();
 
             foreach(var q in _qna_list)
             {
-                ret.Add((q.question, q.answer, q.box_id));
+                ret.Add((q.question, q.answer, q.sound_file, q.box_id));
             }
 
             return ret;
