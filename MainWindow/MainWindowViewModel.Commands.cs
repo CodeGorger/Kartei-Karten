@@ -70,6 +70,14 @@ namespace KarteiKartenLernen
                 return;
             }
 
+            // Ask if reverse order shall be asked too.
+            MessageBoxResult result_ask_reversed = MessageBox.Show(
+                "Also ask reversed direction? (Take the answer as question.)", 
+                "Reversed Order?", 
+                MessageBoxButton.YesNo, 
+                MessageBoxImage.Question);
+            
+
             // Load CSV
             var loadedCsv = FileHelper.ImportWordlistCsv(csv_file);
             if (!loadedCsv.Item1)
@@ -80,7 +88,7 @@ namespace KarteiKartenLernen
 
             _progress_dir = Path.GetDirectoryName(csv_file);
 
-            _questionManager.ImportQuestionAndAnswerList(loadedCsv.Item2);
+            _questionManager.ImportQuestionAndAnswerList(loadedCsv.Item2, (result_ask_reversed != MessageBoxResult.Yes));
             _questionManager.StartTrainingSession();
             SessionNumber = _questionManager.GetSessionNumber();
 
@@ -227,7 +235,7 @@ namespace KarteiKartenLernen
         }
         private void aboutPressedCommand(object parameter)
         {
-            MessageBox.Show("Flashcard Learning\nBy Simon Poschenrieder\nMIT License");
+            MessageBox.Show("Flashcard Learning\nBy Simon Poschenrieder\nMIT License", "About");
         }
         
 

@@ -60,7 +60,11 @@ namespace KarteiKartenLernen
 
                         string question = values[0].Trim();
                         string answer = values[1].Trim();
-                        string sound_file = values[2].Trim();
+                        string sound_file = "";
+                        if(values.Length>2)
+                        {
+                            sound_file = values[2].Trim();
+                        }
                         ret_wordlist.Add((question, answer, sound_file));
                     }
                     ret_status = true;

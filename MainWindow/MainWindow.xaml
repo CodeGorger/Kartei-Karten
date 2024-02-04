@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KarteiKartenLernen"
         mc:Ignorable="d"
-        Title="Kartei Karten Lernen" 
+        Title="Flashcard Learning" 
         Height="450" Width="800"
         MinHeight="430" MinWidth="600"
         Closing="MainWindow_Closing"  >

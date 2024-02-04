@@ -39,13 +39,13 @@ namespace KarteiKartenLernen
 
         private string _progress_file;
 
-        public void ImportQuestionAndAnswerList(List<(string, string, string)> in_qna_list)
+        public void ImportQuestionAndAnswerList(List<(string, string, string)> in_qna_list, bool in_one_directional)
         {
             _training_session_id = 0;
             _qna_list = new List<FlashCard>();
             foreach (var qna in in_qna_list)
             {
-                _qna_list.Add(new FlashCard(qna.Item1, qna.Item2, qna.Item3));
+                _qna_list.Add(new FlashCard(qna.Item1, qna.Item2, qna.Item3, in_one_directional));
             }
         }
 
@@ -351,7 +351,11 @@ namespace KarteiKartenLernen
             if ("" != _progress_file)
             {
                 // Already loaded by progress file
-                MessageBoxResult result_know_prog_file = MessageBox.Show("Save to " + _progress_file + "?", "Save Progress?", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                MessageBoxResult result_know_prog_file = MessageBox.Show(
+                    "Save to " + _progress_file + "?", 
+                    "Save Progress?", 
+                    MessageBoxButton.YesNo, 
+                    MessageBoxImage.Question);
                 if (result_know_prog_file == MessageBoxResult.Yes)
                 {
                     FileHelper.SaveProgress(_progress_file, _training_session_id, _toProgressCsv());
