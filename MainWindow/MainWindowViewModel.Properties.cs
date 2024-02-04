@@ -113,6 +113,17 @@ namespace KarteiKartenLernen
                 OnPropertyChanged(nameof(IsAudioAvailable));
             }
         }
+
+        private bool _audioReversedAvailable = false;
+        public bool IsAudioReversedAvailable
+        {
+            get => _audioReversedAvailable;
+            set
+            {
+                _audioReversedAvailable = value;
+                OnPropertyChanged(nameof(IsAudioReversedAvailable));
+            }
+        }
     }
 }
 

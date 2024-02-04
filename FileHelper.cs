@@ -99,9 +99,9 @@ namespace KarteiKartenLernen
         //}
 
 
-        static public (bool, int, List<(string, string, string, int)>) LoadProgress(string filePath)
+        static public (bool, int, List<(string, string, string, int, int)>) LoadProgress(string filePath)
         {
-            List<(string, string, string, int)> ret_progress = new List<(string, string, string, int)>();
+            List<(string, string, string, int, int)> ret_progress = new List<(string, string, string, int, int)>();
             bool ret_status = false;
             int session_id = 0;
             try
@@ -110,7 +110,7 @@ namespace KarteiKartenLernen
                 {
                     if (!int.TryParse(reader.ReadLine(), out session_id))
                     {
-                        System.Diagnostics.Debug.WriteLine("Conversion failed.");
+                        System.Diagnostics.Debug.WriteLine("Conversion failed session_id.");
                         return (false, session_id, ret_progress);
                     }
                     while (!reader.EndOfStream)
@@ -122,16 +122,19 @@ namespace KarteiKartenLernen
                         string answer = values[1].Trim();
                         string sound_file = values[2].Trim();
 
-                        if (int.TryParse(values[3], out int box_id))
+                        if (!int.TryParse(values[3], out int box_id))
                         {
-                            ret_progress.Add((question, answer, sound_file, box_id));
-                        }
-                        else
-                        {
-                            System.Diagnostics.Debug.WriteLine("Conversion failed.");
+                            System.Diagnostics.Debug.WriteLine("Conversion failed box_id.");
                             ret_status = false;
                             break;
                         }
+                        if (!int.TryParse(values[4], out int reverse_box_id))
+                        {
+                            System.Diagnostics.Debug.WriteLine("Conversion failed reverse_box_id.");
+                            ret_status = false;
+                            break;
+                        }
+                        ret_progress.Add((question, answer, sound_file, box_id, reverse_box_id));
                     }
                     ret_status = true;
                 }
@@ -145,7 +148,7 @@ namespace KarteiKartenLernen
             return (ret_status, session_id, ret_progress);
         }
 
-        static public void SaveProgress(string filePath, int session_id, List<(string, string, string, int)> progress)
+        static public void SaveProgress(string filePath, int session_id, List<(string, string, string, int, int)> progress)
         {
             try
             {
@@ -154,7 +157,7 @@ namespace KarteiKartenLernen
                     writer.WriteLine(session_id);
                     foreach(var c in progress)
                     {
-                        writer.WriteLine(c.Item1 + ";" + c.Item2 + ";" + c.Item3 + ";" + c.Item4);
+                        writer.WriteLine(c.Item1 + ";" + c.Item2 + ";" + c.Item3 + ";" + c.Item4 + ";" + c.Item5);
                     }
                     writer.Close();
                 }

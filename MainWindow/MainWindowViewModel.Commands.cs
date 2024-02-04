@@ -164,12 +164,24 @@ namespace KarteiKartenLernen
         private void _setNextQna()
         {
             var qna = _questionManager.NextQuestionAndAnswer();
-            QuestionText = qna.Item1;
-            AnswerText = qna.Item2;
-            IsAudioAvailable = _tryLoadSoundFile(qna.Item3);
+            bool is_reversed = qna.GetReversed();
+            if(is_reversed)
+            {
+                QuestionText = qna.GetAnswer();
+                AnswerText = qna.GetQuestion();
+                IsAudioAvailable = false;
+                IsAudioReversedAvailable = _tryLoadSoundFile(qna.GetAuestionAudio());
+            }
+            else
+            {
+                QuestionText = qna.GetQuestion();
+                AnswerText = qna.GetAnswer();
+                IsAudioAvailable = _tryLoadSoundFile(qna.GetAuestionAudio());
+                IsAudioReversedAvailable = false;
+            }
             CardsLeft = _questionManager.GetCardsLeft();
             MainProgramState = ProgramState.question_state;
-            CardsBoxOrigin = _questionManager.GetCardBox();
+            CardsBoxOrigin = _questionManager.GetCardBox(is_reversed);
         }
 
         private SoundWrapper _sound;

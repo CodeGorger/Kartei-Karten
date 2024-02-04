@@ -77,9 +77,10 @@
                 <ColumnDefinition Width="{Binding IsAudioAvailable, Converter={StaticResource widthConverter}}"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox Text="{Binding QuestionText}" FontSize="24"
+            <TextBox Text="{Binding QuestionText}" FontSize="28"
 				Grid.Column="0"
 				IsReadOnly="True"
+				VerticalContentAlignment="Center"
 				HorizontalContentAlignment="Center"
 				HorizontalAlignment="Stretch" VerticalAlignment="Top" 
 				Height="60" Margin="10,0,10,0" 
@@ -94,21 +95,47 @@
                     Command="{Binding SpeakerPressedCommand}">
                 <StackPanel>
                     <Image Source="/speaker.png" />
-                    <Label Content="Settings" HorizontalAlignment="Center"/>
                 </StackPanel>
             </Button>
         </Grid>
-        <TextBox Text="{Binding AnswerText}" FontSize="24"
-               IsReadOnly="True"
-               HorizontalContentAlignment="Center" 
-               VerticalContentAlignment="Center" 
+
+        <Grid HorizontalAlignment="Stretch"
+              VerticalAlignment="Top" 
+              Height="150" Margin="0,125,0,0"
+              Visibility="{Binding 
+                    IsActivated, 
+                    Converter={StaticResource visiConverter}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="{Binding IsAudioReversedAvailable, Converter={StaticResource widthConverter}}"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Text="{Binding AnswerText}" FontSize="24"
+				Grid.Column="0"
+                IsReadOnly="True"
+				VerticalContentAlignment="Center"
+                HorizontalContentAlignment="Center" 
                HorizontalAlignment="Stretch" VerticalAlignment="Top" 
-               Height="150" Margin="10,125,10,0"
+               Height="150" Margin="10,0,10,0"
                BorderThickness="2" BorderBrush="Azure"
                Visibility="{Binding 
                    IsResponseState, 
                    Converter={StaticResource visiConverter}}"
                FontWeight="DemiBold"/>
+            <Button Grid.Column="1"
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center"
+                    Margin="5,5,5,5"
+                    Padding="10,10,10,10"
+                    Command="{Binding SpeakerPressedCommand}"
+                    Visibility="{Binding 
+                        IsResponseState, 
+                        Converter={StaticResource visiConverter}}">
+                <StackPanel>
+                    <Image Source="/speaker.png" />
+                </StackPanel>
+            </Button>
+        </Grid>
+            
 
         <Button Content="Reveal" 
                 Command="{Binding RevealCommand}"

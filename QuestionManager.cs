@@ -34,8 +34,8 @@ namespace KarteiKartenLernen
         private int _new_card_promotion_count;
 
         // If a session started
-        private List<int> _open_question_ids;
-        private List<int> _finished_question_ids;
+        private List<(int, bool)> _open_question_ids;
+        private List<(int, bool)> _finished_question_ids;
 
         private string _progress_file;
 
@@ -52,14 +52,14 @@ namespace KarteiKartenLernen
         public void SetProgress(
             string in_progress_file, 
             int in_training_session_id, 
-            List<(string, string, string, int)> in_progress)
+            List<(string, string, string, int, int)> in_progress)
         {
             _progress_file = in_progress_file;
             _training_session_id = in_training_session_id;
             _qna_list = new List<FlashCard>();
             foreach (var c in in_progress)
             {
-                _qna_list.Add(new FlashCard(c.Item1, c.Item2, c.Item3, c.Item4));
+                _qna_list.Add(new FlashCard(c.Item1, c.Item2, c.Item3, c.Item4, c.Item5));
             }
         }
 
@@ -75,8 +75,11 @@ namespace KarteiKartenLernen
             int fillup_count = _box_one_max_count - (box_one_count + box_two_count);
             _fillup_box_one(fillup_count);
 
-            _open_question_ids = new List<int>();
-            _finished_question_ids = new List<int>();
+            _open_question_ids = new List<(int, bool)>();
+            _finished_question_ids = new List<(int, bool)>();
+
+            // Go through all cards and check if the
+            // (correct direction) question must be added 
             for (int i = 0; i < _qna_list.Count; i++)
             {
                 FlashCard c = _qna_list[i];
@@ -84,10 +87,26 @@ namespace KarteiKartenLernen
                 {
                     continue;
                 }
-                
-                if (0==(_training_session_id% _box_repeat_iterations[c.box_id]))
+
+                if (0 == (_training_session_id % _box_repeat_iterations[c.box_id]))
                 {
-                    _open_question_ids.Add(i);
+                    _open_question_ids.Add((i, false));
+                }
+            }
+
+            // Go through all cards and check if the
+            // (reversed direction) question must be added
+            for (int i = 0; i < _qna_list.Count; i++)
+            {
+                FlashCard c = _qna_list[i];
+                if (!(0 < c.reverse_box_id && c.reverse_box_id < 6))
+                {
+                    continue;
+                }
+
+                if (0 == (_training_session_id % _box_repeat_iterations[c.reverse_box_id]))
+                {
+                    _open_question_ids.Add((i, true));
                 }
             }
             _open_question_ids.Shuffle();
@@ -111,6 +130,13 @@ namespace KarteiKartenLernen
             foreach (var qna in _qna_list)
             {
                 if (qna.box_id == to_consider_box_id)
+                {
+                    ret_count++;
+                }
+            }
+            foreach (var qna in _qna_list)
+            {
+                if (qna.reverse_box_id == to_consider_box_id)
                 {
                     ret_count++;
                 }
@@ -150,24 +176,31 @@ namespace KarteiKartenLernen
                 for (int j = 0; j < _qna_list.Count+1; j++)
                 {
                     //System.Diagnostics.Debug.WriteLine("j: " + j);
-                    if (0 == _qna_list[(j+random_start_id) % _qna_list.Count].box_id)
+                    if (0 == _qna_list[(j + random_start_id) % _qna_list.Count].box_id)
                     {
                         _qna_list[(j + random_start_id) % _qna_list.Count].box_id = 1;
+                        break;
+                    }
+                    if (0 == _qna_list[(j + random_start_id) % _qna_list.Count].reverse_box_id)
+                    {
+                        _qna_list[(j + random_start_id) % _qna_list.Count].reverse_box_id = 1;
                         break;
                     }
                 }
             }
         }
 
-        public (string, string, string) NextQuestionAndAnswer()
+        public QuestionAnswerSet NextQuestionAndAnswer()
         {
             if (_open_question_ids.Count == 0)
             {
-                return ("", "", "");
+                return new QuestionAnswerSet("", "", "", false);
             }
-            return (_qna_list[_open_question_ids[0]].question,
-                _qna_list[_open_question_ids[0]].answer,
-                _qna_list[_open_question_ids[0]].sound_file);
+            return new QuestionAnswerSet(
+                _qna_list[_open_question_ids[0].Item1].question,
+                _qna_list[_open_question_ids[0].Item1].answer,
+                _qna_list[_open_question_ids[0].Item1].sound_file,
+                _open_question_ids[0].Item2);
         }
 
         public string GetCardsLeft()
@@ -189,23 +222,40 @@ namespace KarteiKartenLernen
             }
         }
 
-        public string GetCardBox()
+        public string GetCardBox(bool is_asked_reverse)
         {
             if(_open_question_ids.Count==0 || _qna_list.Count == 0)
             {
                 return "";
             }
 
-            if(-1==_qna_list[_open_question_ids[0]].promote)
+            if (is_asked_reverse)
             {
-                return "Card's box: 1 (mod 1)";
+                if (-1 == _qna_list[_open_question_ids[0].Item1].reverse_promote)
+                {
+                    return "Card's box: 1 (mod 1)";
+                }
+                else
+                {
+                    int b = _qna_list[_open_question_ids[0].Item1].reverse_box_id;
+                    int m = _box_repeat_iterations[b];
+
+                    return "Card's box: " + b + " (mod " + m + ")";
+                }
             }
             else
             {
-                int b = _qna_list[_open_question_ids[0]].box_id;
-                int m = _box_repeat_iterations[b];
+                if (-1 == _qna_list[_open_question_ids[0].Item1].promote)
+                {
+                    return "Card's box: 1 (mod 1)";
+                }
+                else
+                {
+                    int b = _qna_list[_open_question_ids[0].Item1].box_id;
+                    int m = _box_repeat_iterations[b];
 
-                return "Card's box: " + b + " (mod " + m + ")";
+                    return "Card's box: " + b + " (mod " + m + ")";
+                }
             }
         }
 
@@ -216,9 +266,19 @@ namespace KarteiKartenLernen
 
         public bool KnewIt()
         {
-            if (_qna_list[_open_question_ids[0]].promote == 0)
+            if(_open_question_ids[0].Item2)
             {
-                _qna_list[_open_question_ids[0]].promote = 1;
+                if (_qna_list[_open_question_ids[0].Item1].reverse_promote == 0)
+                {
+                    _qna_list[_open_question_ids[0].Item1].reverse_promote = 1;
+                }
+            }
+            else
+            {
+                if (_qna_list[_open_question_ids[0].Item1].promote == 0)
+                {
+                    _qna_list[_open_question_ids[0].Item1].promote = 1;
+                }
             }
             _finished_question_ids.Add(_open_question_ids[0]);
             _open_question_ids.RemoveAt(0);
@@ -233,32 +293,58 @@ namespace KarteiKartenLernen
 
         public void DidntKnowIt()
         {
-            _qna_list[_open_question_ids[0]].promote = -1;
+            if (_open_question_ids[0].Item2)
+            {
+                _qna_list[_open_question_ids[0].Item1].reverse_promote = -1;
+            }
+            else
+            {
+                _qna_list[_open_question_ids[0].Item1].promote = -1;
+            }
+                
             if(1==_open_question_ids.Count)
             {
                 return;
             }
-            int tmp_id = _open_question_ids[0];
+            int tmp_id = _open_question_ids[0].Item1;
+            bool tmp_reverse = _open_question_ids[0].Item2;
             _open_question_ids.RemoveAt(0);
             Random rng = new Random();
             int new_insert_id = rng.Next(1, _open_question_ids.Count+1);
             System.Diagnostics.Debug.WriteLine("new_insert_id:" + new_insert_id);
-            _open_question_ids.Insert(new_insert_id, tmp_id);
+            _open_question_ids.Insert(new_insert_id, (tmp_id, tmp_reverse));
         }
 
         private void _clean_up()
         {
             for (int i = 0; i < _finished_question_ids.Count; i++)
             {
-                if (-1 == _qna_list[_finished_question_ids[i]].promote && _qna_list[_finished_question_ids[i]].box_id > 1)
+                if(_finished_question_ids[i].Item2)
                 {
-                    _qna_list[_finished_question_ids[i]].box_id--;
-                    _qna_list[_finished_question_ids[i]].promote = 0;
+                    if (-1 == _qna_list[_finished_question_ids[i].Item1].reverse_promote && 
+                        _qna_list[_finished_question_ids[i].Item1].reverse_box_id > 1)
+                    {
+                        _qna_list[_finished_question_ids[i].Item1].reverse_box_id--;
+                        _qna_list[_finished_question_ids[i].Item1].reverse_promote = 0;
+                    }
+                    if (1 == _qna_list[_finished_question_ids[i].Item1].reverse_promote)
+                    {
+                        _qna_list[_finished_question_ids[i].Item1].reverse_box_id++;
+                        _qna_list[_finished_question_ids[i].Item1].reverse_promote = 0;
+                    }
                 }
-                if (1 == _qna_list[_finished_question_ids[i]].promote)
+                else
                 {
-                    _qna_list[_finished_question_ids[i]].box_id++;
-                    _qna_list[_finished_question_ids[i]].promote = 0;
+                    if (-1 == _qna_list[_finished_question_ids[i].Item1].promote && _qna_list[_finished_question_ids[i].Item1].box_id > 1)
+                    {
+                        _qna_list[_finished_question_ids[i].Item1].box_id--;
+                        _qna_list[_finished_question_ids[i].Item1].promote = 0;
+                    }
+                    if (1 == _qna_list[_finished_question_ids[i].Item1].promote)
+                    {
+                        _qna_list[_finished_question_ids[i].Item1].box_id++;
+                        _qna_list[_finished_question_ids[i].Item1].promote = 0;
+                    }
                 }
             }
 
@@ -288,13 +374,13 @@ namespace KarteiKartenLernen
             return _progress_file;
         }
 
-        private List<(string, string, string, int)> _toProgressCsv()
+        private List<(string, string, string, int, int)> _toProgressCsv()
         {
-            List < (string, string, string, int) > ret = new List<(string, string, string, int)>();
+            List < (string, string, string, int, int) > ret = new List<(string, string, string, int, int)>();
 
             foreach(var q in _qna_list)
             {
-                ret.Add((q.question, q.answer, q.sound_file, q.box_id));
+                ret.Add((q.question, q.answer, q.sound_file, q.box_id, q.reverse_box_id));
             }
 
             return ret;
