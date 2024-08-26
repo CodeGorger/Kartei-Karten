@@ -42,25 +42,25 @@ namespace KarteiKartenLernen
             get => (_programState == ProgramState.answer_state);
         }
 
-        private string _questionText = "";
-        public string QuestionText
+        private CardSide _question;
+        public CardSide Question
         {
-            get => _questionText;
+            get => _question;
             set
             {
-                _questionText = value;
-                OnPropertyChanged(nameof(QuestionText));
+                _question = value;
+                OnPropertyChanged(nameof(Question));
             }
         }
 
-        private string _answerText = "";
-        public string AnswerText
+        private CardSide _answer;
+        public CardSide Answer
         {
-            get => _answerText;
+            get => _answer;
             set
             {
-                _answerText = value;
-                OnPropertyChanged(nameof(AnswerText));
+                _answer = value;
+                OnPropertyChanged(nameof(Answer));
             }
         }
 
@@ -103,25 +103,47 @@ namespace KarteiKartenLernen
             get => _recentFiles;
         }
 
-        private bool _audioAvailable = true;
-        public bool IsAudioAvailable
+        private bool _hasQuestionString = false;
+        public bool HasQuestionString
         {
-            get => _audioAvailable;
+            get => _hasQuestionString;
             set
             {
-                _audioAvailable = value;
-                OnPropertyChanged(nameof(IsAudioAvailable));
+                _hasQuestionString = value;
+                OnPropertyChanged(nameof(HasQuestionString));
             }
         }
 
-        private bool _audioReversedAvailable = false;
-        public bool IsAudioReversedAvailable
+        private bool _hasQuestionAudio = false;
+        public bool HasQuestionAudio
         {
-            get => _audioReversedAvailable;
+            get => _hasQuestionAudio;
             set
             {
-                _audioReversedAvailable = value;
-                OnPropertyChanged(nameof(IsAudioReversedAvailable));
+                _hasQuestionAudio = value;
+                OnPropertyChanged(nameof(HasQuestionAudio));
+            }
+        }
+
+        private bool _hasAnswerString = false;
+        public bool HasAnswerString
+        {
+            get => _hasAnswerString;
+            set
+            {
+                _hasAnswerString = value;
+                OnPropertyChanged(nameof(HasAnswerString));
+            }
+        }
+
+        private bool _hasAnswerAudio = false;
+        public bool HasAnswerAudio
+        {
+            get => _hasAnswerAudio;
+            set
+            {
+                _hasAnswerAudio = value;
+                OnPropertyChanged(nameof(HasAnswerAudio));
             }
         }
     }

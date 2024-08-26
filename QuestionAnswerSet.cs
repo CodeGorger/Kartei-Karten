@@ -1,33 +1,168 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Windows.Media.Media3D;
 
 namespace KarteiKartenLernen
 {
+    class QAEntity
+    {
+        public QAEntity()
+        {
+            _value = new List<string>();
+            _value_datatypes = new List<string>();
+        }
+        
+        public QAEntity(
+            List<string> in_value, 
+            List<string> in_value_datatypes, 
+            string in_side_name, 
+            string in_side_icon)
+        {
+            _value = in_value;
+            _value_datatypes = in_value_datatypes;
+            _side_name = in_side_name;
+            _side_icon = in_side_icon;
+        }
+
+        public List<string> _value;
+        public List<string> _value_datatypes;
+        public string _side_name;
+        public string _side_icon;
+    }
+
     class QuestionAnswerSet
     {
-        private string _answer;
-        private string _question;
-        private string _question_audio;
-        private bool _reversed;
+        private QAEntity _answer;
+        private QAEntity _question;
+
+        // What card is it?
+        private int _card_id;
+
+        // What bin is this QA in?
+        private int _bin_id;
+
+        // Has this been demoted this session?
+        private bool _previously_demoted;
+
+        // What Question direction id is it?
+        private int _question_direction_id;
+
+        // When will be the next session this card is relevant?
+        private int _next_session;
 
         public QuestionAnswerSet(
-            string in_question,
-            string in_answer,
-            string in_question_audio,
-            bool in_reversed)
+            QAEntity in_answer,
+            QAEntity in_question,
+            int in_card_id,
+            int in_bin_id,
+            int in_next_session,
+            int in_question_direction_id
+            )
         {
             _question = in_question;
             _answer = in_answer;
-            _question_audio = in_question_audio;
-            _reversed = in_reversed;
+            _card_id = in_card_id;
+            _bin_id = in_bin_id;
+            _next_session = in_next_session;
+            _question_direction_id = in_question_direction_id;
+            _previously_demoted = false;
         }
 
-        public string GetQuestion() { return _question; }
-        public string GetAnswer() { return _answer; }
-        public string GetAuestionAudio() { return _question_audio; }
-        public bool GetReversed() { return _reversed; }
+        public QAEntity GetQuestion() { return _question; }
+        public QAEntity GetAnswer() { return _answer; }
+        public int GetCardId() { return _card_id; }
+        public int GetBinId() { return _bin_id; }
+        public void SetBinId(int in_bin_id) { _bin_id = in_bin_id; }
+
+        public void SetNextBinId() { _bin_id++; }
+
+        public int GetNextSession() { return _next_session; }
+        public void SetNextSession(int in_next_session) { _next_session = in_next_session; }
+        public int GetQuestionDirectionId() { return _question_direction_id; }
+
+        public void Demote()
+        {
+            _previously_demoted = true;
+            _bin_id = 1;
+        }
+
+        public bool WasDemoted()
+        {
+            return _previously_demoted;
+        }
+
+
+        public CardSide GetQuestionCardSide()
+        {
+            CardSide ret = new CardSide();
+            ret.CardSideName = _question._side_name;
+            ret.CardSideImageIcon = _question._side_icon;
+            for (int i = 0; i < _question._value_datatypes.Count; i++)
+            {
+                switch (_question._value_datatypes[i])
+                {
+                    case "string":
+                        ret.HasText = true;
+                        ret.Text = _question._value[i];
+                        break;
+                    case "audio":
+                        ret.HasAudio = true;
+                        ret.AudioFile = _question._value[i];
+                        break;
+                    case "image":
+                        ret.HasImage = true;
+                        ret.ImageFile = _question._value[i];
+                        break;
+                    case "video":
+                        ret.HasVideo = true;
+                        ret.VideoFile = _question._value[i];
+                        break;
+                    default:
+                        MessageBox.Show("Unknown type " + _question._value_datatypes[i]);
+                        break;
+                }
+            }
+            return ret;
+        }
+
+
+        public CardSide GetAnswerCardSide()
+        {
+            CardSide ret = new CardSide();
+            ret.CardSideName = _answer._side_name;
+            ret.CardSideImageIcon = "/icons/"+_answer._side_icon;
+            for (int i=0; i< _answer._value_datatypes.Count; i++)
+            {
+                switch(_answer._value_datatypes[i])
+                {
+                    case "string":
+                        ret.HasText = true;
+                        ret.Text = _answer._value[i];
+                        break;
+                    case "audio":
+                        ret.HasAudio = true;
+                        ret.AudioFile = _answer._value[i];
+                        break;
+                    case "image":
+                        ret.HasImage = true;
+                        ret.ImageFile = _answer._value[i];
+                        break;
+                    case "video":
+                        ret.HasVideo = true;
+                        ret.VideoFile = _answer._value[i];
+                        break;
+                    default:
+                        MessageBox.Show("Unknown type " + _answer._value_datatypes[i]);
+                        break;
+                }
+            }
+            return ret;
+        }
     }
 }

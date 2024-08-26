@@ -22,7 +22,7 @@ namespace KarteiKartenLernen
             _mwvm = mwvm;
             //_fileHandler = fileHandler;
         }
-
+        
         public string FileName
         {
             get { return _fileName; }
@@ -35,7 +35,7 @@ namespace KarteiKartenLernen
                 return new Command(
                     (object parameter) => {
                         //MessageBox.Show(_fileName);
-                        _mwvm.LoadProgressAndStartSession(_fileName);
+                        _mwvm.LoadSessionProgress(_fileName);
                     }, (object parameter) => { return true; });
                 //return MakeCommand
                 //    .Do(() => _fileHandler.Open(_fileName));

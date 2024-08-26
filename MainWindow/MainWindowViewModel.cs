@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace KarteiKartenLernen
 {
@@ -17,31 +19,35 @@ namespace KarteiKartenLernen
 
             RevealCommand = new Command(
                 revealCard,
-                canRevealCard);
+                (object p) => { return true; });
 
             KnewItCommand = new Command(
                 knewIt,
-                canKnewIt);
+                (object p) => { return true; });
+
+            BoringCommand = new Command(
+                boringQuestion,
+                (object p) => { return true; });
 
             DidntKnowItCommand = new Command(
                 didntKnowIt,
-                canDidntKnowIt);
+                (object p) => { return true; });
 
-            LoadCsvCommand = new Command(
-                loadCsvAndStartSession,
-                canLoadCsv);
+            //LoadCsvCommand = new Command(
+            //    loadCsvAndStartSession,
+            //    (object p) => { return true; });
 
             LoadProgressCommand = new Command(
-                selectLoadProgressAndStartSession,
-                canLoadProgress);
+                selectLoadSessionProgressAndStartSession,
+                (object p) => { return true; });
 
             SpeakerPressedCommand = new Command(
                 speakerPressed,
-                canSpeakerPressed);
+                (object p) => { return true; });
 
             AboutPressedCommand = new Command(
                 aboutPressedCommand,
-                canAboutPressedCommand);
+                (object p) => { return true; });
 
             LoadRecentFiles();
         }

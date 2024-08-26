@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -19,13 +21,13 @@ namespace KarteiKartenLernen
 
         // information about how often (every how many training sessions) shall a box be repeated
         // 0:   new pile
-        // 1-5: learning piles
-        // 6:   known pile
+        // 1-n: learning piles
+        // n+1:   known pile
         private List<int> _box_repeat_iterations;
 
         // a list of tuples,
-        // tuple consists of question, answer and box
-        private List<FlashCard> _qna_list;
+        // tuple consists of (all) questions, answer and box
+        private List<FlashCard> _cards_and_progress;
 
         // a counter for the session id, to know which boxes must be learnt
         private int _training_session_id;
@@ -34,79 +36,151 @@ namespace KarteiKartenLernen
         private int _new_card_promotion_count;
 
         // If a session started
-        private List<(int, bool)> _open_question_ids;
-        private List<(int, bool)> _finished_question_ids;
+        private List<int> _open_question_ids;
+        private List<int> _finished_question_ids;
 
         private string _progress_file;
 
-        public void ImportQuestionAndAnswerList(List<(string, string, string)> in_qna_list, bool in_one_directional)
-        {
-            _training_session_id = 0;
-            _qna_list = new List<FlashCard>();
-            foreach (var qna in in_qna_list)
-            {
-                _qna_list.Add(new FlashCard(qna.Item1, qna.Item2, qna.Item3, in_one_directional));
-            }
-        }
+        private List<QuestionAnswerSet> _all_qna_list;
+        private List<QuestionDirection> _question_directions;
+        List<Side> _sides;
 
+        // After loading a session, the QuestionManager must know the progress
+        // Will load all possible questions into the qna_list
         public void SetProgress(
-            string in_progress_file, 
-            int in_training_session_id, 
-            List<(string, string, string, int, int)> in_progress)
+            string in_progress_file,
+            SessionAndProgress in_session_progress)
         {
             _progress_file = in_progress_file;
-            _training_session_id = in_training_session_id;
-            _qna_list = new List<FlashCard>();
-            foreach (var c in in_progress)
+
+            _box_repeat_iterations = in_session_progress._bin_repetition;
+            // Box with id 0 is the untouched cards bin
+            _box_repeat_iterations.Insert(0, -1);
+            // Box with last id is the done cards
+            _box_repeat_iterations.Add(-1);
+            _box_one_max_count = in_session_progress._max_fillup_size;
+            _new_card_promotion_count = in_session_progress._new_card_limit;
+            _training_session_id = in_session_progress._session_counter;
+
+            _cards_and_progress = new List<FlashCard>();
+
+            // For each card&progress
+            for (int i = 0; i < in_session_progress._progress.Count; i++)
             {
-                _qna_list.Add(new FlashCard(c.Item1, c.Item2, c.Item3, c.Item4, c.Item5));
+                List<QuestionProgress> tmp_progress = in_session_progress._progress[i];
+                List<string> tmp_card = in_session_progress._cards[i];
+
+
+                List<QuestionProgress> tmp_casted_progresses = new List<QuestionProgress>();
+                foreach (var p in tmp_progress)
+                {
+                    tmp_casted_progresses.Add(p);
+                }
+
+                _cards_and_progress.Add(new FlashCard(
+                    tmp_card.Select(o => o.ToString()).ToList(),
+                    tmp_casted_progresses));
+
             }
+
+            _question_directions = in_session_progress._question_directions;
+            _sides = in_session_progress._sides;
+
+            _all_qna_list = new List<QuestionAnswerSet>();
+
+            for (int card_id = 0;
+                card_id < _cards_and_progress.Count;
+                card_id++)
+            {
+                var f = _cards_and_progress[card_id];
+                for (int question_direction_id = 0;
+                    question_direction_id < f.GetProgresses().Count;
+                    question_direction_id++)
+                {
+                    var tmp_question_progress = f.GetProgresses()[question_direction_id];
+                    QuestionDirection qd = _question_directions[question_direction_id];
+
+                    Side tmp_question_side = _sides[qd._from];
+                    Side tmp_answer_side = _sides[qd._to];
+
+                    List<string> tmp_question_values = new List<string>();
+                    List<string> tmp_question_component_datatype = new List<string>();
+                    foreach (FieldData field in tmp_question_side._fields)
+                    {
+                        tmp_question_values.Add(
+                            _cards_and_progress[card_id].GetSides()[field._id_side_component]);
+                        tmp_question_component_datatype.Add(
+                            field._type);
+                    }
+
+                    List<string> tmp_answer_values = new List<string>();
+                    List<string> tmp_answer_component_datatype = new List<string>();
+                    foreach (FieldData field in tmp_answer_side._fields)
+                    {
+                        tmp_answer_values.Add(
+                            _cards_and_progress[card_id].GetSides()[field._id_side_component]);
+                        tmp_answer_component_datatype.Add(
+                            field._type);
+                    }
+
+
+                    QAEntity tmp_question = new QAEntity(
+                        tmp_question_values,
+                        tmp_question_component_datatype,
+                        tmp_question_side._name,
+                        tmp_question_side._icon);
+
+                    QAEntity tmp_answer = new QAEntity(
+                        tmp_answer_values,
+                        tmp_answer_component_datatype,
+                        tmp_answer_side._name,
+                        tmp_answer_side._icon);
+
+
+                    QuestionAnswerSet tmp_qna_set = new QuestionAnswerSet(
+                        tmp_question,
+                        tmp_answer,
+                        card_id,
+                        tmp_question_progress._bin,
+                        tmp_question_progress._next_session,
+                        question_direction_id);
+                    _all_qna_list.Add(tmp_qna_set);
+                }
+            }
+        }
+        
+        public List<QuestionDirection> GetQuestionDirections()
+        {
+            return _question_directions;
         }
 
         public void StartTrainingSession()
         {
             _training_session_id++;
             int box_one_count = _box_count(1);
-            int box_two_count = _box_count(2);
-            if ((box_one_count + box_two_count) >= _box_one_max_count)
+            if (box_one_count >= _box_one_max_count)
             {
                 return;
             }
-            int fillup_count = _box_one_max_count - (box_one_count + box_two_count);
+            int fillup_count = _box_one_max_count - box_one_count;
             _fillup_box_one(fillup_count);
 
-            _open_question_ids = new List<(int, bool)>();
-            _finished_question_ids = new List<(int, bool)>();
+            _open_question_ids = new List<int>();
+            _finished_question_ids = new List<int>();
 
             // Go through all cards and check if the
             // (correct direction) question must be added 
-            for (int i = 0; i < _qna_list.Count; i++)
+            for (int i = 0; i < _all_qna_list.Count; i++)
             {
-                FlashCard c = _qna_list[i];
-                if (!(0 < c.box_id && c.box_id < 6))
+                QuestionAnswerSet qa = _all_qna_list[i];
+                if (!(0 < qa.GetBinId() && qa.GetBinId() < _box_repeat_iterations.Count-1)) 
                 {
                     continue;
                 }
 
-                if (0 == (_training_session_id % _box_repeat_iterations[c.box_id]))
+                if (_training_session_id == qa.GetNextSession())
                 {
-                    _open_question_ids.Add((i, false));
-                }
-            }
-
-            // Go through all cards and check if the
-            // (reversed direction) question must be added
-            for (int i = 0; i < _qna_list.Count; i++)
-            {
-                FlashCard c = _qna_list[i];
-                if (!(0 < c.reverse_box_id && c.reverse_box_id < 6))
-                {
-                    continue;
-                }
-
-                if (0 == (_training_session_id % _box_repeat_iterations[c.reverse_box_id]))
-                {
-                    _open_question_ids.Add((i, true));
+                    _open_question_ids.Add(i);
                 }
             }
             _open_question_ids.Shuffle();
@@ -114,12 +188,13 @@ namespace KarteiKartenLernen
 
         public bool ProgressFinished()
         {
-            for (int i = 0; i < _qna_list.Count; i++)
+            for (int i = 0; i < _all_qna_list.Count; i++)
             {
-                if (_qna_list[i].box_id != 6)
-                {
-                    return false;
-                }
+                //TODO commented out for now
+                //if (_qna_list[i].box_id != 6)
+                //{
+                //    return false;
+                //}
             }
             return true;
         }
@@ -127,16 +202,9 @@ namespace KarteiKartenLernen
         private int _box_count(int to_consider_box_id)
         {
             int ret_count = 0;
-            foreach (var qna in _qna_list)
+            foreach (var qna in _all_qna_list)
             {
-                if (qna.box_id == to_consider_box_id)
-                {
-                    ret_count++;
-                }
-            }
-            foreach (var qna in _qna_list)
-            {
-                if (qna.reverse_box_id == to_consider_box_id)
+                if (qna.GetBinId() == to_consider_box_id)
                 {
                     ret_count++;
                 }
@@ -170,20 +238,18 @@ namespace KarteiKartenLernen
                 //System.Diagnostics.Debug.WriteLine("i: " + i);
                 // Take a random location in the qna_list
                 // and go through the list until you find one promotable obj.
-                int random_start_id = random.Next(0, _qna_list.Count - 1);
+                int random_start_id = random.Next(0, _all_qna_list.Count - 1);
 
                 // Still maximally go through the list once, just for (no) bug purposes
-                for (int j = 0; j < _qna_list.Count+1; j++)
+                for (int j = 0; j < _all_qna_list.Count+1; j++)
                 {
                     //System.Diagnostics.Debug.WriteLine("j: " + j);
-                    if (0 == _qna_list[(j + random_start_id) % _qna_list.Count].box_id)
+
+                    if (0 == _all_qna_list[(j + random_start_id) % _all_qna_list.Count].GetBinId())
                     {
-                        _qna_list[(j + random_start_id) % _qna_list.Count].box_id = 1;
-                        break;
-                    }
-                    if (0 == _qna_list[(j + random_start_id) % _qna_list.Count].reverse_box_id)
-                    {
-                        _qna_list[(j + random_start_id) % _qna_list.Count].reverse_box_id = 1;
+                        _all_qna_list[(j + random_start_id) % _all_qna_list.Count].SetBinId(1);
+                        _all_qna_list[(j + random_start_id) % _all_qna_list.Count].SetNextSession(
+                            _training_session_id);
                         break;
                     }
                 }
@@ -194,13 +260,9 @@ namespace KarteiKartenLernen
         {
             if (_open_question_ids.Count == 0)
             {
-                return new QuestionAnswerSet("", "", "", false);
+                return new QuestionAnswerSet(new QAEntity(), new QAEntity(), 0, 0, 0, 0);
             }
-            return new QuestionAnswerSet(
-                _qna_list[_open_question_ids[0].Item1].question,
-                _qna_list[_open_question_ids[0].Item1].answer,
-                _qna_list[_open_question_ids[0].Item1].sound_file,
-                _open_question_ids[0].Item2);
+            return _all_qna_list[_open_question_ids[0]];
         }
 
         public string GetCardsLeft()
@@ -216,47 +278,22 @@ namespace KarteiKartenLernen
         public void ResetProgress()
         {
             _training_session_id = 0;
-            for (int j = 0; j < _qna_list.Count; j++)
-            {
-                _qna_list[j].box_id = 0;
-            }
+            //TODO commented out for now
+            //for (int j = 0; j < _qna_list.Count; j++)
+            //{
+            //    _qna_list[j].box_id = 0;
+            //}
         }
 
-        public string GetCardBox(bool is_asked_reverse)
+        public string GetCardBox()
         {
-            if(_open_question_ids.Count==0 || _qna_list.Count == 0)
+            if(_open_question_ids.Count==0 || _all_qna_list.Count == 0)
             {
                 return "";
             }
 
-            if (is_asked_reverse)
-            {
-                if (-1 == _qna_list[_open_question_ids[0].Item1].reverse_promote)
-                {
-                    return "Card's box: 1 (mod 1)";
-                }
-                else
-                {
-                    int b = _qna_list[_open_question_ids[0].Item1].reverse_box_id;
-                    int m = _box_repeat_iterations[b];
+            return "Card's box: "+ _all_qna_list[_open_question_ids[0]].GetBinId();
 
-                    return "Card's box: " + b + " (mod " + m + ")";
-                }
-            }
-            else
-            {
-                if (-1 == _qna_list[_open_question_ids[0].Item1].promote)
-                {
-                    return "Card's box: 1 (mod 1)";
-                }
-                else
-                {
-                    int b = _qna_list[_open_question_ids[0].Item1].box_id;
-                    int m = _box_repeat_iterations[b];
-
-                    return "Card's box: " + b + " (mod " + m + ")";
-                }
-            }
         }
 
         public string GetSessionNumber()
@@ -264,22 +301,33 @@ namespace KarteiKartenLernen
             return "Session number " + _training_session_id;
         }
 
+        public bool Boring()
+        {
+            _all_qna_list[_open_question_ids[0]].SetNextSession(0);
+            _all_qna_list[_open_question_ids[0]].SetBinId(_box_repeat_iterations.Count-1);
+
+            _finished_question_ids.Add(_open_question_ids[0]);
+            _open_question_ids.RemoveAt(0);
+
+            if (_open_question_ids.Count == 0)
+            {
+                _clean_up();
+                return true;
+            }
+            return false;
+        }               
+        
         public bool KnewIt()
         {
-            if(_open_question_ids[0].Item2)
+            if (!_all_qna_list[_open_question_ids[0]].WasDemoted())
             {
-                if (_qna_list[_open_question_ids[0].Item1].reverse_promote == 0)
-                {
-                    _qna_list[_open_question_ids[0].Item1].reverse_promote = 1;
-                }
+                // In this session, this question has never been demoted...
+                _all_qna_list[_open_question_ids[0]].SetNextBinId();
+                int new_bin_id = _all_qna_list[_open_question_ids[0]].GetBinId();
+                _all_qna_list[_open_question_ids[0]].SetNextSession(
+                    _training_session_id + _box_repeat_iterations[new_bin_id]);
             }
-            else
-            {
-                if (_qna_list[_open_question_ids[0].Item1].promote == 0)
-                {
-                    _qna_list[_open_question_ids[0].Item1].promote = 1;
-                }
-            }
+
             _finished_question_ids.Add(_open_question_ids[0]);
             _open_question_ids.RemoveAt(0);
 
@@ -293,59 +341,29 @@ namespace KarteiKartenLernen
 
         public void DidntKnowIt()
         {
-            if (_open_question_ids[0].Item2)
-            {
-                _qna_list[_open_question_ids[0].Item1].reverse_promote = -1;
-            }
-            else
-            {
-                _qna_list[_open_question_ids[0].Item1].promote = -1;
-            }
-                
-            if(1==_open_question_ids.Count)
+            //Demoting causes next session repetion
+            _all_qna_list[_open_question_ids[0]].SetNextSession(_training_session_id + 1);
+            _all_qna_list[_open_question_ids[0]].Demote();
+
+            if (1 == _open_question_ids.Count)
             {
                 return;
             }
-            int tmp_id = _open_question_ids[0].Item1;
-            bool tmp_reverse = _open_question_ids[0].Item2;
+
+            // Reinsert at random location
+            int tmp_id = _open_question_ids[0];
             _open_question_ids.RemoveAt(0);
             Random rng = new Random();
             int new_insert_id = rng.Next(1, _open_question_ids.Count+1);
-            System.Diagnostics.Debug.WriteLine("new_insert_id:" + new_insert_id);
-            _open_question_ids.Insert(new_insert_id, (tmp_id, tmp_reverse));
+            //System.Diagnostics.Debug.WriteLine("new_insert_id:" + new_insert_id);
+            _open_question_ids.Insert(new_insert_id, tmp_id);
         }
 
         private void _clean_up()
         {
-            for (int i = 0; i < _finished_question_ids.Count; i++)
+            foreach(int id in _finished_question_ids)
             {
-                if(_finished_question_ids[i].Item2)
-                {
-                    if (-1 == _qna_list[_finished_question_ids[i].Item1].reverse_promote && 
-                        _qna_list[_finished_question_ids[i].Item1].reverse_box_id > 1)
-                    {
-                        _qna_list[_finished_question_ids[i].Item1].reverse_box_id--;
-                        _qna_list[_finished_question_ids[i].Item1].reverse_promote = 0;
-                    }
-                    if (1 == _qna_list[_finished_question_ids[i].Item1].reverse_promote)
-                    {
-                        _qna_list[_finished_question_ids[i].Item1].reverse_box_id++;
-                        _qna_list[_finished_question_ids[i].Item1].reverse_promote = 0;
-                    }
-                }
-                else
-                {
-                    if (-1 == _qna_list[_finished_question_ids[i].Item1].promote && _qna_list[_finished_question_ids[i].Item1].box_id > 1)
-                    {
-                        _qna_list[_finished_question_ids[i].Item1].box_id--;
-                        _qna_list[_finished_question_ids[i].Item1].promote = 0;
-                    }
-                    if (1 == _qna_list[_finished_question_ids[i].Item1].promote)
-                    {
-                        _qna_list[_finished_question_ids[i].Item1].box_id++;
-                        _qna_list[_finished_question_ids[i].Item1].promote = 0;
-                    }
-                }
+
             }
 
             if ("" != _progress_file)
@@ -358,7 +376,9 @@ namespace KarteiKartenLernen
                     MessageBoxImage.Question);
                 if (result_know_prog_file == MessageBoxResult.Yes)
                 {
-                    FileHelper.SaveProgress(_progress_file, _training_session_id, _toProgressCsv());
+                    SessionAndProgress tmp_session_progress_to_save =
+                        _create_session_and_progress();
+                    FileHelper.SaveProgress(_progress_file, tmp_session_progress_to_save);
                     return;
                 }
             }
@@ -369,22 +389,64 @@ namespace KarteiKartenLernen
                 // Only possible if it was imported
                 string kkp_file = FileHelper.AskForFile("kkp files (*.kkp)|*.kkp|All files (*.*)|*.*", true);
                 _progress_file = kkp_file;
-                FileHelper.SaveProgress(kkp_file, _training_session_id, _toProgressCsv());
+                SessionAndProgress tmp_session_progress_to_save =
+                    _create_session_and_progress();
+                FileHelper.SaveProgress(_progress_file, tmp_session_progress_to_save);
             }
         }
+
+        private SessionAndProgress _create_session_and_progress()
+        {
+            SessionAndProgress ret = new SessionAndProgress();
+            ret._bin_repetition = _box_repeat_iterations;
+            ret._bin_repetition.RemoveAt(0);
+            ret._bin_repetition.Reverse();
+            ret._bin_repetition.RemoveAt(0);
+            ret._bin_repetition.Reverse();
+
+            ret._max_fillup_size = _box_one_max_count;
+            ret._new_card_limit = _new_card_promotion_count;
+            ret._session_counter = _training_session_id;
+
+            ret._question_directions = _question_directions;
+            ret._sides = _sides;
+
+            int qd_count = _question_directions.Count();
+            ret._cards = new List<List<string>>();
+            ret._progress = new List<List<QuestionProgress>>();
+            for (int card_id = 0;
+                card_id < _cards_and_progress.Count;
+                card_id++)
+            {
+                ret._cards.Add(_cards_and_progress[card_id].GetSides());
+                List<QuestionProgress> tmp_progress = new List<QuestionProgress>();
+                for (int qd_id = 0; qd_id < qd_count; qd_id++)
+                {
+                    tmp_progress.Add(new QuestionProgress(
+                        _all_qna_list[card_id * qd_count + qd_id].GetBinId(),
+                        _all_qna_list[card_id * qd_count + qd_id].GetNextSession()));
+                }
+                ret._progress.Add(tmp_progress);
+            }
+            return ret;
+        }
+
 
         public string GetProgressFileName()
         {
             return _progress_file;
         }
 
+        //TODO Progress will be saved very different soon...
         private List<(string, string, string, int, int)> _toProgressCsv()
         {
             List < (string, string, string, int, int) > ret = new List<(string, string, string, int, int)>();
 
-            foreach(var q in _qna_list)
+            foreach(var q in _all_qna_list)
             {
-                ret.Add((q.question, q.answer, q.sound_file, q.box_id, q.reverse_box_id));
+                //TODO Dummy entry for now
+                //ret.Add((q.question, q.answer, q.sound_file, q.box_id, q.reverse_box_id));
+                ret.Add(("","","",0,0));
             }
 
             return ret;
