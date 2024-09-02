@@ -195,6 +195,7 @@ namespace KarteiKartenLernen
             var qna = _questionManager.NextQuestionAndAnswer();
             Question = qna.GetQuestionCardSide();
             Answer = qna.GetAnswerCardSide();
+            OtherSidesText = qna.GetOtherCardSideText();
             MainProgramState = ProgramState.question_state;
 
             CardsLeft = _questionManager.GetCardsLeft();

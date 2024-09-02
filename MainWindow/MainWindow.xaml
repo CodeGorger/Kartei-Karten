@@ -48,168 +48,233 @@
             <!-- Other top-level menu items can be added here -->
         </Menu>
 
-        <Label Content="{Binding CardsBoxOrigin}" FontSize="12"
-            HorizontalContentAlignment="Center"
-            HorizontalAlignment="Right" VerticalAlignment="Top" 
-            Height="30" Margin="150,10,150,10" 
+        <Grid 
+            Margin="0,0,0,0"
+            VerticalAlignment="Stretch"
             Visibility="{Binding 
                 IsActivated, 
-                Converter={StaticResource visiConverter}}"
-            FontWeight="DemiBold"/>
-        
-        <Label Content="{Binding CardsLeft}" FontSize="12"
-            HorizontalContentAlignment="Center"
-            HorizontalAlignment="Right" VerticalAlignment="Top" 
-            Height="30" Margin="10,10,10,10" 
-            Visibility="{Binding 
-                IsActivated, 
-                Converter={StaticResource visiConverter}}"
-            FontWeight="DemiBold"/>
-
-        <Grid HorizontalAlignment="Stretch"
-              VerticalAlignment="Top" 
-              Height="60" Margin="0,50,0,0"
-              Visibility="{Binding 
-                    IsActivated, 
-                    Converter={StaticResource visiConverter}}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="{Binding Question.HasAudio, Converter={StaticResource widthConverter}}"/>
-            </Grid.ColumnDefinitions>
-
-            <TextBox Text="{Binding Question.Text}" FontSize="28"
-				Grid.Column="0"
-				IsReadOnly="True"
-				VerticalContentAlignment="Center"
-				HorizontalContentAlignment="Center"
-				HorizontalAlignment="Stretch" VerticalAlignment="Top" 
-				Height="60" Margin="10,0,10,0" 
-				BorderThickness="2" BorderBrush="Azure"
-                FontWeight="DemiBold"
-                Visibility="{Binding 
-                    Question.HasText, 
-                    Converter={StaticResource visiConverter}}"/>
-
-            <Button Grid.Column="1"
-                    HorizontalAlignment="Center" 
-                    VerticalAlignment="Center"
-                    Margin="5,5,5,5"
-                    Padding="10,10,10,10"
-                    Command="{Binding SpeakerPressedCommand}">
-                <StackPanel>
-                    <Image Source="/icons/speaker.ico" />
-                </StackPanel>
-            </Button>
-        </Grid>
-        <Grid HorizontalAlignment="Stretch"
-              VerticalAlignment="Top" 
-              Height="40" Margin="0,125,0,0"
-              Visibility="{Binding 
-                    IsQuestionState, 
-                    Converter={StaticResource visiConverter}}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" 
-                   Content="   Asking for:" 
-                   FontSize="12"/>
-            <Label Grid.Column="1" 
-                   Content="{Binding Answer.CardSideName}" 
-                   FontSize="12" 
-                   HorizontalAlignment="Left"/>
-            <Image Grid.Column="2" 
-                   Source="{Binding Answer.CardSideImageIcon}" 
-                   HorizontalAlignment="Left" 
-                   Stretch="Uniform" />
-        </Grid>
-        <Grid HorizontalAlignment="Stretch"
-              VerticalAlignment="Top" 
-              Height="150" Margin="0,125,0,0"
-              Visibility="{Binding 
-                    IsActivated, 
-                    Converter={StaticResource visiConverter}}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="{Binding Answer.HasAudio, Converter={StaticResource widthConverter}}"/>
-            </Grid.ColumnDefinitions>
-            <TextBox Text="{Binding Answer.Text}" FontSize="24"
-				Grid.Column="0"
-                IsReadOnly="True"
-				VerticalContentAlignment="Center"
-                HorizontalContentAlignment="Center" 
-               HorizontalAlignment="Stretch" VerticalAlignment="Top" 
-               Height="150" Margin="10,0,10,0"
-               BorderThickness="2" BorderBrush="Azure"
-               Visibility="{Binding 
-                   IsResponseState, 
-                   Converter={StaticResource visiConverter}}"
-               FontWeight="DemiBold"/>
-            <Button Grid.Column="1"
-                    HorizontalAlignment="Center" 
-                    VerticalAlignment="Center"
-                    Margin="5,5,5,5"
-                    Padding="10,10,10,10"
-                    Command="{Binding SpeakerPressedCommand}"
-                    Visibility="{Binding 
-                        IsResponseState, 
-                        Converter={StaticResource visiConverter}}">
-                <StackPanel>
-                    <Image Source="/icons/speaker.ico" />
-                </StackPanel>
-            </Button>
-        </Grid>
+                Converter={StaticResource visiConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
             
+            <!-- Top StatusBar :  "Card's box: 1   Cards left: 26" -->
+            <Grid Grid.Row="0" Height="30">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="120"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="1"
+                    Content="{Binding CardsBoxOrigin}" FontSize="12"
+                    HorizontalContentAlignment="Center"
+                    Visibility="{Binding 
+                        IsActivated, 
+                        Converter={StaticResource visiConverter}}"
+                    FontWeight="DemiBold"/>
+                <Label Grid.Column="2"
+                    Content="{Binding CardsLeft}" FontSize="12"
+                    HorizontalContentAlignment="Center"
+                    Visibility="{Binding 
+                        IsActivated, 
+                        Converter={StaticResource visiConverter}}"
+                    FontWeight="DemiBold"/>
+            </Grid>
 
-        <Button Content="Reveal" 
-                Command="{Binding RevealCommand}"
-                FontSize="20"
-                FontWeight="DemiBold"
+            <!-- Question Card -->
+            <Grid Grid.Row="1"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Margin="10,10,10,10"
+                Visibility="{Binding 
+                    IsActivated, 
+                    Converter={StaticResource visiConverter}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="{Binding Question.HasAudio, Converter={StaticResource widthConverter}}"/>
+                </Grid.ColumnDefinitions>
+
+                <Viewbox
+		            HorizontalAlignment="Stretch" 
+                    VerticalAlignment="Stretch" >
+                    <TextBox 
+                        Text="{Binding Question.Text}"
+                        FontSize="36"
+		                Grid.Column="0"
+		                IsReadOnly="True"
+		                VerticalContentAlignment="Center"
+		                HorizontalContentAlignment="Center"
+		                BorderThickness="2" BorderBrush="Azure"
+                        FontWeight="DemiBold"
+                        Visibility="{Binding 
+                            Question.HasText, 
+                            Converter={StaticResource visiConverter}}"/>
+                </Viewbox>
+                <Button Grid.Column="1"
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center"
+                    Margin="10,5,0,5"
+                    Padding="10,10,10,10"
+                    Width="50" Height="50"
+                    Command="{Binding SpeakerPressedCommand}">
+                    <StackPanel>
+                        <Image Source="/icons/speaker.ico" />
+                    </StackPanel>
+                </Button>
+            </Grid>
+
+            <!-- Question To Info -->
+            <Grid Grid.Row="2"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
                 Visibility="{Binding 
                     IsQuestionState, 
-                    Converter={StaticResource visiConverter}}" 
-                HorizontalAlignment="Center" Height="50" Margin="0,300,0,0" VerticalAlignment="Top" Width="247"/>
-        <Grid HorizontalAlignment="Stretch"
-              VerticalAlignment="Top" 
-              Height="50" Margin="0,300,0,0"
-              Visibility="{Binding 
+                    Converter={StaticResource visiConverter}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" 
+                       Content="   Asking for:" 
+                       FontSize="12"
+                       VerticalAlignment="Center"/>
+                <Label Grid.Column="1" 
+                       Content="{Binding Answer.CardSideName}" 
+                       FontSize="12" 
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"/>
+                <Image Grid.Column="2" 
+                       Source="{Binding Answer.CardSideImageIcon}" 
+                       HorizontalAlignment="Left" 
+                       VerticalAlignment="Center"
+                       Width="75" />
+            </Grid>
+
+            <!-- Actual Answer -->
+            <Grid Grid.Row="2"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Margin="10,0,10,10"
+                Visibility="{Binding 
                     IsResponseState, 
                     Converter={StaticResource visiConverter}}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Button Content="Boring" 
-                    Grid.Column="0"
-                    Background="DimGray"
-                    FontSize="20"
-                    FontWeight="DemiBold"
-                    Command="{Binding BoringCommand}"
-                    HorizontalAlignment="Stretch"/>
-            <Button Content="Knew it" 
-                    Grid.Column="1"
-                    Background="Green"
-                    FontSize="20"
-                    FontWeight="DemiBold"
-                    Command="{Binding KnewItCommand}"
-                    HorizontalAlignment="Stretch"/>
-            <Button Content="Didn't know it" 
-                    Grid.Column="2"
-                    Background="Red"
-                    FontSize="20"
-                    FontWeight="DemiBold"
-                    Command="{Binding DidntKnowItCommand}" 
-                    HorizontalAlignment="Stretch"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="{Binding Answer.HasAudio, Converter={StaticResource widthConverter}}"/>
+                </Grid.ColumnDefinitions>
+                <Viewbox
+		            HorizontalAlignment="Stretch" 
+                    VerticalAlignment="Stretch" >
+                    <TextBox Text="{Binding Answer.Text}" FontSize="32"
+                                IsReadOnly="True"
+				                VerticalContentAlignment="Center"
+                                HorizontalContentAlignment="Center"
+                                BorderThickness="2" BorderBrush="Azure"
+                                FontWeight="DemiBold"/>
+                </Viewbox>
+                <Button Grid.Column="1"
+                    Margin="10,5,0,5"
+                    Padding="10,10,10,10"
+                    Width="50" Height="50"
+                    Command="{Binding SpeakerPressedCommand}">
+                    <StackPanel>
+                        <Image Source="/icons/speaker.ico" />
+                    </StackPanel>
+                </Button>
+            </Grid>
+            
+            <!-- Additional Answer Information -->
+            <Viewbox Grid.Row="3"
+		        HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch" >
+                <TextBox 
+                    Visibility="{Binding 
+                        IsResponseState, 
+                        Converter={StaticResource visiConverter}}"
+                    Margin="10,0,10,10"
+                    Text="{Binding OtherSidesText}" FontSize="24"				    
+                    IsReadOnly="True"
+				    VerticalContentAlignment="Center"
+                    HorizontalContentAlignment="Center"
+                    BorderThickness="2" BorderBrush="Azure"
+                    FontWeight="DemiBold"/>
+            </Viewbox>
+
+
+            <!-- Reveal-Button -->
+            <Grid Grid.Row="3"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Visibility="{Binding 
+                    IsQuestionState, 
+                    Converter={StaticResource visiConverter}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="75"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Content="Reveal" 
+                        Grid.Column="2"
+                        Command="{Binding RevealCommand}"
+                        FontSize="20"
+                        Height="40"
+                        FontWeight="DemiBold"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Bottom"/>
+            </Grid>
+            
+            <!-- Response-Buttons "Boring  ;  Knew It  ;  Didn't know it" -->
+            <Grid Grid.Row="4"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Margin="10,0,10,10"
+                Visibility="{Binding
+                    IsResponseState,
+                    Converter={StaticResource visiConverter}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="75"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Content="Boring"
+                        Grid.Column="0"
+                        Background="DimGray"
+                        FontSize="20"
+                        FontWeight="DemiBold"
+                        Command="{Binding BoringCommand}"
+                        HorizontalAlignment="Stretch"/>
+                <Button Content="Knew it"
+                        Grid.Column="1"
+                        Background="Green"
+                        FontSize="20"
+                        FontWeight="DemiBold"
+                        Command="{Binding KnewItCommand}"
+                        HorizontalAlignment="Stretch"/>
+                <Button Content="Didn't know it"
+                        Grid.Column="2"
+                        Background="Red"
+                        FontSize="20"
+                        FontWeight="DemiBold"
+                        Command="{Binding DidntKnowItCommand}"
+                        HorizontalAlignment="Stretch"/>
+            </Grid>
+            
+            
+        <!-- ?!?!?!? <Label 
+            Content="{Binding SessionNumber}" 
+            FontSize="12"
+            HorizontalContentAlignment="Center"
+            HorizontalAlignment="Right" VerticalAlignment="Top" 
+            Height="30" Margin="10,350,10,10" 
+            Visibility="{Binding 
+                IsActivated, 
+                Converter={StaticResource visiConverter}}"
+            FontWeight="DemiBold"/>-->
         </Grid>
-        <Label Content="{Binding SessionNumber}" FontSize="12"
-        HorizontalContentAlignment="Center"
-        HorizontalAlignment="Right" VerticalAlignment="Top" 
-        Height="30" Margin="10,350,10,10" 
-        Visibility="{Binding 
-            IsActivated, 
-            Converter={StaticResource visiConverter}}"
-        FontWeight="DemiBold"/>
     </Grid>
 </Window>

@@ -40,6 +40,7 @@ namespace KarteiKartenLernen
     {
         private QAEntity _answer;
         private QAEntity _question;
+        private string _othersides_text;
 
         // What card is it?
         private int _card_id;
@@ -59,14 +60,16 @@ namespace KarteiKartenLernen
         public QuestionAnswerSet(
             QAEntity in_answer,
             QAEntity in_question,
+            string in_othersides_text,
             int in_card_id,
             int in_bin_id,
             int in_next_session,
             int in_question_direction_id
             )
         {
-            _question = in_question;
             _answer = in_answer;
+            _question = in_question;
+            _othersides_text = in_othersides_text;
             _card_id = in_card_id;
             _bin_id = in_bin_id;
             _next_session = in_next_session;
@@ -97,6 +100,11 @@ namespace KarteiKartenLernen
             return _previously_demoted;
         }
 
+
+        public string GetOtherCardSideText()
+        {
+            return _othersides_text;
+        }
 
         public CardSide GetQuestionCardSide()
         {

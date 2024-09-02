@@ -17,6 +17,7 @@ namespace KarteiKartenLernen
             _box_one_max_count = 30;
             _new_card_promotion_count = 15;
             _progress_file = "";
+            _knew_cards_count = 0;
         }
 
         // information about how often (every how many training sessions) shall a box be repeated
@@ -31,6 +32,8 @@ namespace KarteiKartenLernen
 
         // a counter for the session id, to know which boxes must be learnt
         private int _training_session_id;
+        private int _knew_cards_count;
+        private int _max_questions;        
 
         private int _box_one_max_count;
         private int _new_card_promotion_count;
@@ -53,6 +56,7 @@ namespace KarteiKartenLernen
         {
             _progress_file = in_progress_file;
 
+            _max_questions = in_session_progress._max_questions;
             _box_repeat_iterations = in_session_progress._bin_repetition;
             // Box with id 0 is the untouched cards bin
             _box_repeat_iterations.Insert(0, -1);
@@ -136,10 +140,13 @@ namespace KarteiKartenLernen
                         tmp_answer_side._name,
                         tmp_answer_side._icon);
 
+                    string tmp_othersides_text = get_othersides_text(card_id, qd._from, qd._to);
+
 
                     QuestionAnswerSet tmp_qna_set = new QuestionAnswerSet(
                         tmp_question,
                         tmp_answer,
+                        tmp_othersides_text,
                         card_id,
                         tmp_question_progress._bin,
                         tmp_question_progress._next_session,
@@ -148,7 +155,33 @@ namespace KarteiKartenLernen
                 }
             }
         }
-        
+
+        private string get_othersides_text(int in_card_id, int in_from, int in_to)
+        {
+            string ret="";
+            Side tmp_question_side = _sides[in_from];
+            Side tmp_answer_side = _sides[in_to];
+
+            List<int> used_fields = new List<int>();
+            for(int i=0;i<_sides.Count;i++)
+            {
+                if(i == in_from || i == in_to)
+                {
+                    continue;
+                }
+                foreach(var f in _sides[i]._fields)
+                {
+                    if (f._type == "string")
+                    {
+                        ret += _cards_and_progress[in_card_id].GetSides()[f._id_side_component]+" ";
+                    }
+                }
+            }
+
+            return ret;
+        }
+
+
         public List<QuestionDirection> GetQuestionDirections()
         {
             return _question_directions;
@@ -156,6 +189,7 @@ namespace KarteiKartenLernen
 
         public void StartTrainingSession()
         {
+            _knew_cards_count = 0;
             _training_session_id++;
             int box_one_count = _box_count(1);
             if (box_one_count >= _box_one_max_count)
@@ -260,7 +294,7 @@ namespace KarteiKartenLernen
         {
             if (_open_question_ids.Count == 0)
             {
-                return new QuestionAnswerSet(new QAEntity(), new QAEntity(), 0, 0, 0, 0);
+                return new QuestionAnswerSet(new QAEntity(), new QAEntity(), "", 0, 0, 0, 0);
             }
             return _all_qna_list[_open_question_ids[0]];
         }
@@ -319,6 +353,7 @@ namespace KarteiKartenLernen
         
         public bool KnewIt()
         {
+            _knew_cards_count++;
             if (!_all_qna_list[_open_question_ids[0]].WasDemoted())
             {
                 // In this session, this question has never been demoted...
@@ -331,7 +366,7 @@ namespace KarteiKartenLernen
             _finished_question_ids.Add(_open_question_ids[0]);
             _open_question_ids.RemoveAt(0);
 
-            if (_open_question_ids.Count == 0)
+            if (_open_question_ids.Count == 0 || _knew_cards_count >= _max_questions)
             {
                 _clean_up();
                 return true;
@@ -361,9 +396,10 @@ namespace KarteiKartenLernen
 
         private void _clean_up()
         {
-            foreach(int id in _finished_question_ids)
+            foreach(int id in _open_question_ids)
             {
-
+                // All open questions must be postponed to next session.
+                _all_qna_list[id].SetNextSession(_all_qna_list[id].GetNextSession() + 1);
             }
 
             if ("" != _progress_file)

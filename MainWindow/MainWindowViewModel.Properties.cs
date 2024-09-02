@@ -64,6 +64,19 @@ namespace KarteiKartenLernen
             }
         }
 
+        private string _other_sides_text;
+        public string OtherSidesText
+        {
+            get => _other_sides_text;
+            set
+            {
+                _other_sides_text = value;
+                OnPropertyChanged(nameof(OtherSidesText));
+            }
+        }
+
+
+
         private string _sessionNumber = "";
         public string SessionNumber
         {
