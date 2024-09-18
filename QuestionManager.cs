@@ -440,6 +440,7 @@ namespace KarteiKartenLernen
             ret._bin_repetition.RemoveAt(0);
             ret._bin_repetition.Reverse();
 
+            ret._max_questions = _max_questions;
             ret._max_fillup_size = _box_one_max_count;
             ret._new_card_limit = _new_card_promotion_count;
             ret._session_counter = _training_session_id;
