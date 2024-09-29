@@ -78,16 +78,6 @@ namespace KarteiKartenLernen
             return (ret_status, ret_wordlist);
         }
 
-        static public bool CheckForProgessFile(string filePath)
-        {
-            if (!filePath.EndsWith(".csv"))
-            {
-                return false;
-            }
-            string progressFile = filePath.Replace(".csv", ".kkp");
-            return File.Exists(progressFile);
-        }
-
 
         //static public (bool, int, List<(string, string, string, int, int)>) LoadSessionProgress(string filePath)
         static public (bool, SessionAndProgress) LoadSessionProgress(string filePath)
@@ -118,7 +108,7 @@ namespace KarteiKartenLernen
             {
                 using (StreamWriter writer = new StreamWriter(filePath))
                 {
-                    string json_content = JsonConvert.SerializeObject(progress);
+                    string json_content = JsonConvert.SerializeObject(progress, Formatting.Indented);
                         
                     writer.Write(json_content); 
                     writer.Close();

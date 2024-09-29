@@ -423,8 +423,8 @@ namespace KarteiKartenLernen
             if (result == MessageBoxResult.Yes)
             {
                 // Only possible if it was imported
-                string kkp_file = FileHelper.AskForFile("kkp files (*.kkp)|*.kkp|All files (*.*)|*.*", true);
-                _progress_file = kkp_file;
+                string kp2_file = FileHelper.AskForFile("kp2 files (*.kp2)|*.kp2|All files (*.*)|*.*", true);
+                _progress_file = kp2_file;
                 SessionAndProgress tmp_session_progress_to_save =
                     _create_session_and_progress();
                 FileHelper.SaveProgress(_progress_file, tmp_session_progress_to_save);
