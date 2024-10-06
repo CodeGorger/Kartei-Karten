@@ -18,6 +18,9 @@ namespace KarteiKartenLernen
             _new_card_promotion_count = 15;
             _progress_file = "";
             _knew_cards_count = 0;
+
+            _open_question_ids = new List<int>();
+            _finished_question_ids = new List<int>();
         }
 
         // information about how often (every how many training sessions) shall a box be repeated
@@ -192,12 +195,11 @@ namespace KarteiKartenLernen
             _knew_cards_count = 0;
             _training_session_id++;
             int box_one_count = _box_count(1);
-            if (box_one_count >= _box_one_max_count)
+            if (box_one_count < _box_one_max_count)
             {
-                return;
+                int fillup_count = _box_one_max_count - box_one_count;
+                _fillup_box_one(fillup_count);
             }
-            int fillup_count = _box_one_max_count - box_one_count;
-            _fillup_box_one(fillup_count);
 
             _open_question_ids = new List<int>();
             _finished_question_ids = new List<int>();

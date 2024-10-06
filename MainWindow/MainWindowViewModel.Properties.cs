@@ -127,16 +127,16 @@ namespace KarteiKartenLernen
             }
         }
 
-        private bool _hasQuestionAudio = false;
-        public bool HasQuestionAudio
-        {
-            get => _hasQuestionAudio;
-            set
-            {
-                _hasQuestionAudio = value;
-                OnPropertyChanged(nameof(HasQuestionAudio));
-            }
-        }
+        //private bool _hasQuestionAudio = false;
+        //public bool HasQuestionAudio
+        //{
+        //    get => _hasQuestionAudio;
+        //    set
+        //    {
+        //        _hasQuestionAudio = value;
+        //        OnPropertyChanged(nameof(HasQuestionAudio));
+        //    }
+        //}
 
         private bool _hasAnswerString = false;
         public bool HasAnswerString
@@ -149,16 +149,16 @@ namespace KarteiKartenLernen
             }
         }
 
-        private bool _hasAnswerAudio = false;
-        public bool HasAnswerAudio
-        {
-            get => _hasAnswerAudio;
-            set
-            {
-                _hasAnswerAudio = value;
-                OnPropertyChanged(nameof(HasAnswerAudio));
-            }
-        }
+        //private bool _hasAnswerAudio = false;
+        //public bool HasAnswerAudio
+        //{
+        //    get => _hasAnswerAudio;
+        //    set
+        //    {
+        //        _hasAnswerAudio = value;
+        //        OnPropertyChanged(nameof(HasAnswerAudio));
+        //    }
+        //}
     }
 }
 

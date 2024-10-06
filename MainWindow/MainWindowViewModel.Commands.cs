@@ -243,7 +243,8 @@ namespace KarteiKartenLernen
             {
                 _tryLoadSoundFile(Question.AudioFile);
             }
-            _sound.Play();
+
+            _sound?.Play();
         }
 
         public ICommand AboutPressedCommand { get; set; }

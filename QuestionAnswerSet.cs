@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.ConstrainedExecution;
 using System.Security.Policy;
@@ -120,8 +121,11 @@ namespace KarteiKartenLernen
                         ret.Text = _question._value[i];
                         break;
                     case "audio":
-                        ret.HasAudio = true;
-                        ret.AudioFile = _question._value[i];
+                        ret.AudioFile = _question._value[i]; 
+                        if (File.Exists(ret.AudioFile))
+                        {
+                            ret.HasAudio = true;
+                        }
                         break;
                     case "image":
                         ret.HasImage = true;
@@ -154,8 +158,11 @@ namespace KarteiKartenLernen
                         ret.Text = _answer._value[i];
                         break;
                     case "audio":
-                        ret.HasAudio = true;
                         ret.AudioFile = _answer._value[i];
+                        if (File.Exists(ret.AudioFile))
+                        {
+                            ret.HasAudio = true;
+                        }
                         break;
                     case "image":
                         ret.HasImage = true;

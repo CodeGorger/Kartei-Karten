@@ -120,7 +120,9 @@
                     Margin="10,5,0,5"
                     Padding="10,10,10,10"
                     Width="50" Height="50"
-                    Command="{Binding SpeakerPressedCommand}">
+                    Command="{Binding SpeakerPressedCommand}"
+                    Visibility="{Binding Question.HasAudio,
+                        Converter={StaticResource visiConverter}}">
                     <StackPanel>
                         <Image Source="/icons/speaker.ico" />
                     </StackPanel>
@@ -181,7 +183,9 @@
                     Margin="10,5,0,5"
                     Padding="10,10,10,10"
                     Width="50" Height="50"
-                    Command="{Binding SpeakerPressedCommand}">
+                    Command="{Binding SpeakerPressedCommand}"
+                    Visibility="{Binding Answer.HasAudio,
+                        Converter={StaticResource visiConverter}}">
                     <StackPanel>
                         <Image Source="/icons/speaker.ico" />
                     </StackPanel>
