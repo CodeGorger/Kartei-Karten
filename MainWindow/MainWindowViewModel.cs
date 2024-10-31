@@ -63,6 +63,7 @@ namespace KarteiKartenLernen
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                 "flashcardlearning", "recent_files_memory.txt");
 
+
         public void LoadRecentFiles()
         {
             try

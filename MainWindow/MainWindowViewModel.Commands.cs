@@ -193,8 +193,8 @@ namespace KarteiKartenLernen
         private void _setNextQna()
         {
             var qna = _questionManager.NextQuestionAndAnswer();
-            Question = qna.GetQuestionCardSide();
-            Answer = qna.GetAnswerCardSide();
+            Question = qna.GetQuestionCardSide(_questionManager.GetProgressFileNameBaseDir());
+            Answer = qna.GetAnswerCardSide(_questionManager.GetProgressFileNameBaseDir());
             OtherSidesText = qna.GetOtherCardSideText();
             MainProgramState = ProgramState.question_state;
 

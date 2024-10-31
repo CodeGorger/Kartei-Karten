@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:KarteiKartenLernen"
              StartupUri="MainWindow/MainWindow.xaml">
     <Application.Resources>
-         
+        <FontFamily x:Key="SourceHanSerif">pack://application:,,,/fonts/SourceHanSerif.otf#Source Han Serif SC VF ExtraLig</FontFamily>
     </Application.Resources>
 </Application>

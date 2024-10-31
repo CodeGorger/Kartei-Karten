@@ -36,13 +36,17 @@ Page InstFiles
 ; Default section
 Section SectInstall
     ; Output path for installation
-    SetOutPath "$INSTDIR\icons"
+    ; SetOutPath "$INSTDIR\icons"
 	
     ; Files to be installed: Icons
-    File "icons\speaker.ico"
-    File "icons\english.ico"
-    File "icons\hanzi.ico"
-    File "icons\pinyin.ico"
+    ; File "icons\speaker.ico"
+    ; File "icons\english.ico"
+    ; File "icons\hanzi.ico"
+    ; File "icons\pinyin.ico"
+	
+	
+    SetOutPath "$INSTDIR\fonts"
+	File "fonts\SourceHanSerif.otf"
 	
     SetOutPath $InstDir
     ; Files to be installed: Binaries

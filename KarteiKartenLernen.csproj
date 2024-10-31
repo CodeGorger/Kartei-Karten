@@ -8,6 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="fonts\NotoSans.otf" />
+    <None Remove="fonts\SourceHanSerif.otf" />
+    <None Remove="fonts\StarLovePencil.ttf" />
     <None Remove="icons\english.ico" />
     <None Remove="icons\hanzi.ico" />
     <None Remove="icons\kkl.ico" />
@@ -15,6 +18,7 @@
     <None Remove="icons\speaker.ico" />
     <None Remove="icons\speaker_icon.ico" />
     <None Remove="speaker.png" />
+    <None Remove="ZhaiZaiJiaZiDongBi-2.ttf" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +28,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="fonts\SourceHanSerif.otf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Resource Include="icons\english.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>

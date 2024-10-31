@@ -107,7 +107,7 @@ namespace KarteiKartenLernen
             return _othersides_text;
         }
 
-        public CardSide GetQuestionCardSide()
+        public CardSide GetQuestionCardSide(string in_kp2_base_dir)
         {
             CardSide ret = new CardSide();
             ret.CardSideName = _question._side_name;
@@ -122,7 +122,7 @@ namespace KarteiKartenLernen
                         break;
                     case "audio":
                         ret.AudioFile = _question._value[i]; 
-                        if (File.Exists(ret.AudioFile))
+                        if (File.Exists(in_kp2_base_dir + "\\" + ret.AudioFile))
                         {
                             ret.HasAudio = true;
                         }
@@ -144,7 +144,7 @@ namespace KarteiKartenLernen
         }
 
 
-        public CardSide GetAnswerCardSide()
+        public CardSide GetAnswerCardSide(string in_kp2_base_dir)
         {
             CardSide ret = new CardSide();
             ret.CardSideName = _answer._side_name;
@@ -159,7 +159,7 @@ namespace KarteiKartenLernen
                         break;
                     case "audio":
                         ret.AudioFile = _answer._value[i];
-                        if (File.Exists(ret.AudioFile))
+                        if (File.Exists(in_kp2_base_dir + "\\" + ret.AudioFile))
                         {
                             ret.HasAudio = true;
                         }

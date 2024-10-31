@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -50,6 +51,11 @@ namespace KarteiKartenLernen
         private List<QuestionAnswerSet> _all_qna_list;
         private List<QuestionDirection> _question_directions;
         List<Side> _sides;
+
+        public string GetProgressFileNameBaseDir()
+        {
+            return Path.GetDirectoryName(_progress_file);
+        }
 
         // After loading a session, the QuestionManager must know the progress
         // Will load all possible questions into the qna_list
