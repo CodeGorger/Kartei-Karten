@@ -48,6 +48,9 @@ Section SectInstall
     SetOutPath "$INSTDIR\fonts"
 	File "fonts\SourceHanSerif.otf"
 	
+    SetOutPath "$INSTDIR\runtimes"
+	File /r "bin\Release\net5.0-windows\runtimes\*.*"
+	
     SetOutPath $InstDir
     ; Files to be installed: Binaries
     File "bin\Release\net5.0-windows\KarteiKartenLernen.dll"
@@ -66,6 +69,9 @@ Section SectInstall
     File "bin\Release\net5.0-windows\NAudio.WinForms.dll"
     File "bin\Release\net5.0-windows\NAudio.WinMM.dll"
     File "bin\Release\net5.0-windows\Newtonsoft.Json.dll"
+	
+    File "bin\Release\net5.0-windows\KarteiKartenLernen.deps.json"
+    File "bin\Release\net5.0-windows\Microsoft.CognitiveServices.Speech.csharp.dll"
 	
 
     ; Create a desktop shortcut
