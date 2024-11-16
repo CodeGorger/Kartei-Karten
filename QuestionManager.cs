@@ -47,14 +47,26 @@ namespace KarteiKartenLernen
         private List<int> _finished_question_ids;
 
         private string _progress_file;
+        private string _sound_dir;
 
         private List<QuestionAnswerSet> _all_qna_list;
         private List<QuestionDirection> _question_directions;
-        List<Side> _sides;
+        private List<Side> _sides;
 
         public string GetProgressFileNameBaseDir()
         {
             return Path.GetDirectoryName(_progress_file);
+        }
+
+        public string GetSoundDir()
+        {
+            return _sound_dir;
+        }
+
+
+        public void SetSoundFile(int in_card_id, string in_soundfile)
+        {
+            _cards_and_progress[in_card_id].SetSide(2, in_soundfile);
         }
 
         // After loading a session, the QuestionManager must know the progress
@@ -66,6 +78,7 @@ namespace KarteiKartenLernen
             _progress_file = in_progress_file;
 
             _max_questions = in_session_progress._max_questions;
+            _sound_dir = in_session_progress._sound_dir;
             _box_repeat_iterations = in_session_progress._bin_repetition;
             // Box with id 0 is the untouched cards bin
             _box_repeat_iterations.Insert(0, -1);
@@ -119,8 +132,9 @@ namespace KarteiKartenLernen
                     List<string> tmp_question_values = new List<string>();
                     List<string> tmp_question_component_datatype = new List<string>();
                     foreach (FieldData field in tmp_question_side._fields)
-                    {
+                    {                        
                         tmp_question_values.Add(
+                            ((field._type == "audio") ? (_sound_dir + "/") : "")+
                             _cards_and_progress[card_id].GetSides()[field._id_side_component]);
                         tmp_question_component_datatype.Add(
                             field._type);
@@ -131,6 +145,7 @@ namespace KarteiKartenLernen
                     foreach (FieldData field in tmp_answer_side._fields)
                     {
                         tmp_answer_values.Add(
+                            ((field._type == "audio") ? (_sound_dir + "/") : "") +
                             _cards_and_progress[card_id].GetSides()[field._id_side_component]);
                         tmp_answer_component_datatype.Add(
                             field._type);
@@ -452,6 +467,7 @@ namespace KarteiKartenLernen
             ret._max_fillup_size = _box_one_max_count;
             ret._new_card_limit = _new_card_promotion_count;
             ret._session_counter = _training_session_id;
+            ret._sound_dir = _sound_dir;
 
             ret._question_directions = _question_directions;
             ret._sides = _sides;

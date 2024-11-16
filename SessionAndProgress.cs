@@ -76,6 +76,9 @@ namespace KarteiKartenLernen
         [JsonProperty("max_questions")]
         public int _max_questions { get; set; }
 
+        [JsonProperty("sound_dir")]
+        public string _sound_dir { get; set; }
+
         [JsonProperty("bin_repetition")]
         public List<int> _bin_repetition { get; set; }
 

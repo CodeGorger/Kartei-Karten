@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.CognitiveServices.Speech;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Media.Media3D;
+using Microsoft.CognitiveServices.Speech;
+using Microsoft.CognitiveServices.Speech.Audio;
 
 namespace KarteiKartenLernen
 {
@@ -107,8 +110,13 @@ namespace KarteiKartenLernen
             return _othersides_text;
         }
 
-        public CardSide GetQuestionCardSide(string in_kp2_base_dir)
+        public CardSide GetQuestionCardSide(
+            string in_kp2_base_dir,
+            string in_sound_dir,
+            SpeechConfig in_tts_conf,
+            out string created_wav )
         {
+            created_wav = "";
             CardSide ret = new CardSide();
             ret.CardSideName = _question._side_name;
             ret.CardSideImageIcon = _question._side_icon;
@@ -125,6 +133,19 @@ namespace KarteiKartenLernen
                         if (File.Exists(in_kp2_base_dir + "\\" + ret.AudioFile))
                         {
                             ret.HasAudio = true;
+                        }
+                        else if (in_tts_conf != null && in_sound_dir != null)
+                        {
+                            string filename = _getFilename();
+                            string hanzi = _getHanzi();
+                            Directory.CreateDirectory(Path.Combine(in_kp2_base_dir, in_sound_dir));
+                            string p = Path.Combine(in_kp2_base_dir, in_sound_dir, filename);
+                            using var audioConfig = AudioConfig.FromWavFileOutput(p);
+                            using var synthesizer = new SpeechSynthesizer(in_tts_conf, audioConfig);
+                            synthesizer.SpeakTextAsync(hanzi).GetAwaiter().GetResult();
+                            ret.HasAudio = true;
+                            ret.AudioFile = Path.Combine(in_sound_dir, filename);
+                            created_wav = filename;
                         }
                         break;
                     case "image":
@@ -143,9 +164,63 @@ namespace KarteiKartenLernen
             return ret;
         }
 
-
-        public CardSide GetAnswerCardSide(string in_kp2_base_dir)
+        private string _getHanzi()
         {
+            string hanzi = "";
+            if (_answer._side_name == "Chinese Character")
+            {
+                hanzi = _answer._value[0];
+            }
+            else if (_question._side_name == "Chinese Character")
+            {
+                hanzi = _question._value[0];
+            }
+            else
+            {
+                hanzi = _othersides_text;
+            }
+            return hanzi;
+        }
+
+        private string _getFilename()
+        {
+            string english = "";
+            if (_answer._side_name == "English")
+            {
+                english = _answer._value[0];
+            }
+            else if (_question._side_name == "English")
+            {
+                english = _question._value[0];
+            }
+            else
+            {
+                english = _othersides_text;
+            }
+
+            return english.Trim()
+                .Replace(" ", "_")
+                .Replace("'", "_")
+                .Replace(",", "_")
+                .Replace(";", "_")
+                .Replace(":", "_")
+                .Replace("*", "_")
+                .Replace("?", "_")
+                .Replace("\"", "_")
+                .Replace("<", "_")
+                .Replace(">", "_")
+                .Replace("|", "_")
+                .Replace("/", "_")
+                .Replace("\\", "_") + ".wav";
+        }
+
+        public CardSide GetAnswerCardSide(
+            string in_kp2_base_dir,
+            string in_sound_dir,
+            SpeechConfig in_tts_conf,
+            out string created_wav)
+        {
+            created_wav = "";
             CardSide ret = new CardSide();
             ret.CardSideName = _answer._side_name;
             ret.CardSideImageIcon = "/icons/"+_answer._side_icon;
@@ -162,6 +237,19 @@ namespace KarteiKartenLernen
                         if (File.Exists(in_kp2_base_dir + "\\" + ret.AudioFile))
                         {
                             ret.HasAudio = true;
+                        }
+                        else if (in_tts_conf != null && in_sound_dir != null)
+                        {
+                            string filename = _getFilename();
+                            string hanzi = _getHanzi();
+                            Directory.CreateDirectory(Path.Combine(in_kp2_base_dir, in_sound_dir));
+                            string p = Path.Combine(in_kp2_base_dir, in_sound_dir, filename);
+                            using var audioConfig = AudioConfig.FromWavFileOutput(p);
+                            using var synthesizer = new SpeechSynthesizer(in_tts_conf, audioConfig);
+                            synthesizer.SpeakTextAsync(hanzi).GetAwaiter().GetResult();
+                            ret.HasAudio = true;
+                            ret.AudioFile = Path.Combine(in_sound_dir, filename);
+                            created_wav = filename;
                         }
                         break;
                     case "image":

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.IO;
+using Microsoft.CognitiveServices.Speech;
 
 namespace KarteiKartenLernen
 {
@@ -192,9 +193,26 @@ namespace KarteiKartenLernen
 
         private void _setNextQna()
         {
+            string sound_file="";
             var qna = _questionManager.NextQuestionAndAnswer();
-            Question = qna.GetQuestionCardSide(_questionManager.GetProgressFileNameBaseDir());
-            Answer = qna.GetAnswerCardSide(_questionManager.GetProgressFileNameBaseDir());
+            Question = qna.GetQuestionCardSide(
+                _questionManager.GetProgressFileNameBaseDir(),
+                _questionManager.GetSoundDir(),
+                _tts_config,
+                out sound_file);
+            if(sound_file!="")
+            {
+                _questionManager.SetSoundFile(qna.GetCardId(), sound_file);
+            }
+            Answer = qna.GetAnswerCardSide(
+                _questionManager.GetProgressFileNameBaseDir(),
+                _questionManager.GetSoundDir(),
+                _tts_config,
+                out sound_file);
+            if (sound_file != "")
+            {
+                _questionManager.SetSoundFile(qna.GetCardId(), sound_file);
+            }
             OtherSidesText = qna.GetOtherCardSideText();
             MainProgramState = ProgramState.question_state;
 

@@ -6,15 +6,52 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.CognitiveServices.Speech;
+using Microsoft.CognitiveServices.Speech.Audio;
+
 
 namespace KarteiKartenLernen
 {
     public partial class MainWindowViewModel : ViewModelBase
     {
 
+        public class AzureConfig
+        {
+            public string azure_key { get; set; }
+            public string location { get; set; }
+        }
+
+        static AzureConfig LoadAzureConfig(string filePath)
+        {
+            try
+            {
+                var json = File.ReadAllText(filePath);
+                return System.Text.Json.JsonSerializer.Deserialize<AzureConfig>(json);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error reading or parsing {filePath}: {ex.Message}");
+                return null;
+            }
+        }
+
+        void SynthesizeAudioAsync()
+        {
+            var config = LoadAzureConfig("azure.json");
+            if(config!=null && config.azure_key != null && config.location != null)
+            {
+                _tts_config = SpeechConfig.FromSubscription(config.azure_key, config.location);
+                _tts_config.SpeechSynthesisLanguage = "zh-CN";
+            }
+        }
+
+        private SpeechConfig _tts_config;
+
         private QuestionManager _questionManager;
         public MainWindowViewModel()
         {
+            SynthesizeAudioAsync();
+
             _questionManager = new QuestionManager();
 
             RevealCommand = new Command(

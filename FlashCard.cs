@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +22,10 @@ namespace KarteiKartenLernen
         public List<string> GetSides()
         {
             return sides;
+        }
+        public void SetSide(int in_id, string in_val)
+        {
+            sides[in_id] = in_val;
         }
 
         public List<QuestionProgress> GetProgresses()
